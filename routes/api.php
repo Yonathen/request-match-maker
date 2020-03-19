@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 Route::prefix('v1')->group(function(){
 	Route::post('create', 'UserNewController@createAccount');
 	Route::post('access', 'UserExistingController@accessAccount');
-	Route::get('/verify/{token}', 'VerifyController@verifyEmail');
+	Route::get('verify/{token}', 'UserExistingController@verifyEmail')->name('verify');
 	Route::apiResource('pages', 'PageController');
 	Route::apiResource('pages/content', 'PageContentController');
 	

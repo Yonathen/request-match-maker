@@ -19,7 +19,7 @@ interface UserExistingRepositoryInterface
      */
 	public function getUser($column_name, $email);
 	
-	/**
+     /**
      * @param User $user
      */
     public function verifyEmail(User $user);

@@ -51,7 +51,7 @@ class UserExistingController extends Controller
                 throw (new Exception("Email not verified", 1));
             }
 
-            $useToken = $this->userExistingRepository->accessToken($request->all());
+            $userToken = $this->userExistingRepository->accessToken($request->all());
             if (is_null($userToken)) {
                 throw (new Exception("Failed to access account.", 1));
             }
@@ -113,7 +113,7 @@ class UserExistingController extends Controller
                 throw (new Exception("Invalid token", 1)); 
             }
 
-            if(!$this->userExistingRepository->verifyUser($user)) {
+            if(!$this->userExistingRepository->verifyEmail($user)) {
                 throw (new Exception("Failed to verify", 1)); 
             }
 

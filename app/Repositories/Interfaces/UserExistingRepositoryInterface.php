@@ -13,10 +13,11 @@ interface UserExistingRepositoryInterface
 	public function getAuthUser();
 
 	/**
+	 * @param string $column_name
 	 * @param string $email
      * @return User $user
      */
-	public function getUser($email);
+	public function getUser($column_name, $email);
 	
 	/**
      * @param User $user

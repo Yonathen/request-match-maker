@@ -12,6 +12,7 @@ use App\Enums\ReturnType;
 use League\Flysystem\Exception;
 use App\Mail\VerificationEmail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserNewController extends Controller
 {
@@ -41,7 +42,7 @@ class UserNewController extends Controller
                 throw (new Exception("Failed to create User.", 1));
             }
 
-            Mail::to($createdUser->email)->send(new VerificationEmail($createdUser))
+            Mail::to($createdUser->email)->send(new VerificationEmail($createdUser));
             
             $this->returnValue = $createdUser;
         } catch (Exception $e) {

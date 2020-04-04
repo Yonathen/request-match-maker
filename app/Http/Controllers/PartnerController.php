@@ -46,7 +46,7 @@ class PartnerController extends Controller
         try {
             $requestingUser = $this->userRepository->getAuthUser();
             $confirmingUser = $this->userRepository->getUser('email', $request->email);
-            if ( !is_null( $this->partnerRepository->getPatner( $requestingUser, $confirmingUser ) ) || is_null($confirmingUser) ) {
+            if ( is_null($confirmingUser) || !is_null( $this->partnerRepository->getPatner( $requestingUser, $confirmingUser ) ) ) {
                 throw (new Exception("Failed to request partnership.", 1));
             }
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Utility\R;
 use App\Repositories\Interfaces\PageRepositoryInterface;
 use App\Repositories\Interfaces\PageContentRepositoryInterface;
-use App\Repositories\Interfaces\UserExistingRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Http\Resources\ResponseResource;
 use App\Http\Resources\ResponseCollection;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ class PageController extends Controller
     use R;
     private $pageRepository;
     private $pageContentRepository;
-    private $userExistingRepository;
+    private $userRepository;
 
     public function __construct(PageRepositoryInterface $pageRepository, 
         PageContentRepositoryInterface $pageContentRepository)

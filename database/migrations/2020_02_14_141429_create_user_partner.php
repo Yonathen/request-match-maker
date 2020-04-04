@@ -28,7 +28,6 @@ class CreateUserPartner extends Migration
         Schema::create('user_partner', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->date('date');
             $table->enum('status', ['Confirmed', 'Pending', 'Blocked']);
             $table->unsignedBigInteger('requested_by');
             $table->unsignedBigInteger('confirmed_by');

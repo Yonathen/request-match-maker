@@ -11,13 +11,13 @@ use League\Flysystem\Exception;
 trait R
 {
 	/** @var int */
-	public $returnType;
+	public $returnType = ReturnType::SINGLE;
 
 	/** @var string */
 	public $type;
 
 	/** @var bool */
-	public $status;
+	public $status = true;
 
 	/** @var T|null|array */
 	public $returnValue; 

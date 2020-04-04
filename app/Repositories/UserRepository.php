@@ -1,12 +1,12 @@
 <?php 
 namespace App\Repositories;
 
-use App\Repositories\Interfaces\UserExistingRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\model\User;
 use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
 
-class UserExistingRepository implements UserExistingRepositoryInterface 
+class UserRepository implements UserRepositoryInterface 
 {
 
 	/**

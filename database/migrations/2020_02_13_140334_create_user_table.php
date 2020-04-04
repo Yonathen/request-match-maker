@@ -30,6 +30,7 @@ class CreateUserTable extends Migration
             $table->json('address')->nullable();
             $table->json('slides')->nullable();
             $table->json('contacts')->nullable();
+            $table->json('notifications')->nullable();
             $table->string('email')->unique();
             $table->unsignedBigInteger('email_verified')->default(0);
             $table->timestamp('email_verified_at')->nullable();

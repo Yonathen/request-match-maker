@@ -13,6 +13,7 @@ use League\Flysystem\Exception;
 use App\Mail\VerificationEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Http\Controllers\UserController;
 
 class UserNewController extends Controller
 {

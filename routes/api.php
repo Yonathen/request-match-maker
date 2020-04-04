@@ -14,15 +14,27 @@ use Illuminate\Http\Request;
 */
 Route::prefix('v1')->group(function(){
 	Route::post('create', 'UserNewController@createAccount');
-	Route::post('access', 'UserExistingController@accessAccount');
-	Route::get('verify/{token}', 'UserExistingController@verifyEmail')->name('verify');
+	Route::post('access', 'UserController@accessAccount');
+	Route::get('verify/{token}', 'UserController@verifyEmail')->name('verify');
 	Route::apiResource('pages', 'PageController');
 	Route::apiResource('pages/content', 'PageContentController');
 	
 	Route::group(['middleware' => 'auth:api'], function() {
-        Route::get('retrieveUser', 'UserExistingController@retrieveUser');
-		Route::get('logout', 'UserExistingController@logout');
-		Route::get('logoutFromAllDevice', 'UserExistingController@logoutFromAllDevice');
+        Route::get('profile', 'UserController@profile');
+		Route::get('user/partners', 'UserController@getPartnerData');
+		Route::get('user/notifications', 'UserController@getMyNotifications');
+
+		Route::post('partner/request', 'PartnerController@requestPartnership');
+		Route::post('partner/confirm', 'PartnerController@confirmPartner');
+		Route::post('partner/remove', 'PartnerController@removePartner');
+		Route::post('partner/block', 'PartnerController@blockPartner');
+
+
+		Route::get('notification/clear', 'NotificationController@clearMyNotifications');
+		Route::get('notification/remove/{id}', 'NotificationController@removeNotifications');
+
+		Route::get('logout', 'UserController@logout');
+		Route::get('logoutFromAllDevice', 'UserController@logoutFromAllDevice');
     });
 });
 

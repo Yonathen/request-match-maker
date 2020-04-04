@@ -21,11 +21,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'name', 'account_created_on', 'email', 'password', 'gender', 'email_verification_token',
     ];
 
+    protected $hidden = [ 'password', 'remember_token', ];
+
+    protected $casts = [
+        'representative' => 'array', 'service' => 'array', 'address' => 'array',
+        'slides' => 'array', 'contacts' => 'array', 'notifications' => 'array',
+    ];
+
     public function AauthAcessToken(){
         return $this->hasMany('App\model\OauthAccessToken');
     }
-
-    protected $hidden = [ 'password', 'remember_token', ];
 
     public function userActivity() 
     {
@@ -76,6 +81,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany('App\model\Request');
     }
-
     
 }

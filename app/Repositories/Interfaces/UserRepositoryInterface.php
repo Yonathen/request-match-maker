@@ -3,7 +3,7 @@ namespace App\Repositories\Interfaces;
 
 use App\model\User;
 
-interface UserExistingRepositoryInterface
+interface UserRepositoryInterface
 {
 
 

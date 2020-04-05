@@ -109,7 +109,7 @@ class PartnerController extends Controller
             $authUser = $this->userRepository->getAuthUser();
             $partnerUser = $this->userRepository->getUser( 'email', $request->email );
             $partnerToRemove = $this->partnerRepository->getPatner( $authUser, $partnerUser );
-            if ( is_null( $partnerToRemove ) ) {
+            if (is_null($partnerUser) || is_null( $partnerToRemove ) ) {
                 throw (new Exception("Failed to remove partnership.", 1));
             }
 
@@ -132,7 +132,7 @@ class PartnerController extends Controller
             $authUser = $this->userRepository->getAuthUser();
             $partnerUser = $this->userRepository->getUser( 'email', $request->email );
             $partnerToBlock = $this->partnerRepository->getPatner( $authUser, $partnerUser );
-            if ( is_null( $partnerToBlock ) ) {
+            if (is_null($partnerUser) || is_null( $partnerToBlock ) ) {
                 throw (new Exception("Failed to confirm partnership.", 1));
             }
 

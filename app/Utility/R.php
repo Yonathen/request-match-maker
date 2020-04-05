@@ -1,17 +1,17 @@
 <?php 
 namespace App\Utility;
 
-use App\Enums\ReturnType;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\ResponseResource;
 use App\Http\Resources\ResponseCollection;
-use App\Enums\ReturnType as ReturnTypeEnum;
 use League\Flysystem\Exception;
+
+use App\Enums\ReturnType as ReturnTypeEnum;
 
 trait R
 {
 	/** @var int */
-	public $returnType = ReturnType::SINGLE;
+	public $returnType = ReturnTypeEnum::SINGLE;
 
 	/** @var string */
 	public $type;

@@ -16,11 +16,13 @@ class NotificationRepository implements NotificationRepositoryInterface
      */
 	public function sendNotification(User $user, Notification $notification)
 	{
-		if (!is_null($user->notifications)) {
-			array_push($user->notifications, $notification);
+		$notifications = $user->notifications;
+		if (!is_null($notifications)) {
+			array_push($notifications, $notification);
 		} else {
-			$user->notifications = [$notification];
+			$notifications = [$notification];
 		}
+		$user->notifications = $notification;
 		return $user->save();
 	}
 

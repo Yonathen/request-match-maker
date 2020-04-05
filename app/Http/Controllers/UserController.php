@@ -188,11 +188,6 @@ class UserController extends Controller
             if (is_null($result)) {
                 throw (new Exception("Failed to get data.", 1));
             }
-
-
-            foreach ($result as $val) {
-                print_r($val);
-            }
             $this->returnValue = $result;
         } catch (Exception $e) {
             $this->failedRequest($e);

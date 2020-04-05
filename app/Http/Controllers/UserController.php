@@ -177,10 +177,10 @@ class UserController extends Controller
                 case 'MyPartnerRequests':
                     $result = $this->partnerRepository->getSelfPatnerRequests($user);
                 break;
-                case 'RecivedRequests':
+                case 'MyRecivedRequests':
                     $result = $this->partnerRepository->getReceivedPatnerRequests($user);
                 break;
-                case 'BlockedPartners':
+                case 'MyBlockedPartners':
                     $result = $this->partnerRepository->getBlockedPatners($user);
                 break;
             }

@@ -1,13 +1,16 @@
 <?php 
 namespace App\Repositories;
 
-use App\Repositories\Interfaces\PartnerRepositoryInterface;
+use Illuminate\Support\Facades\Auth; 
+use Carbon\Carbon;
+
 use App\model\User;
 use App\model\UserPartner;
 use App\Enums\PartnerStatus;
 
-use Illuminate\Support\Facades\Auth; 
-use Carbon\Carbon;
+use App\Utility\UserBase;
+
+use App\Repositories\Interfaces\PartnerRepositoryInterface;
 
 class PartnerRepository implements PartnerRepositoryInterface 
 {
@@ -23,6 +26,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 				$query->where('requested_by', $userII->id)
 					  ->where('confirmed_by', $userI->id);
 			})
+			->with('requestedUser', 'confirmedUser')
 			->first();
 		
 	}
@@ -32,13 +36,13 @@ class PartnerRepository implements PartnerRepositoryInterface
      */
 	public function getConfirmedPatners(User $user)
 	{
-		// print_r($user->id);
 		return UserPartner::where('status', $status = PartnerStatus::CONFIRMED)
-			->where(function($query) use ($user) {
-				$query->where('requested_by', $user->id)
-					  ->orWhere('confirmed_by', $user->id);
-			})
-			->paginate(10);
+				->where(function($query) use ($user) {
+					$query->where('requested_by', $user->id)
+						->orWhere('confirmed_by', $user->id);
+				})
+				->with('requestedUser', 'confirmedUser')
+				->paginate(10);
 	}
 
 	/**
@@ -47,8 +51,9 @@ class PartnerRepository implements PartnerRepositoryInterface
 	public function getReceivedPatnerRequests(User $user)
 	{
 		return UserPartner::where('status', PartnerStatus::PENDING)
-			->where('confirmed_by', $user->id)
-			->paginate(10);
+				->where('confirmed_by', $user->id)
+				->with('requestedUser', 'confirmedUser')
+				->paginate(10);
 	}
 
 	/**
@@ -57,8 +62,9 @@ class PartnerRepository implements PartnerRepositoryInterface
 	public function getSelfPatnerRequests(User $user)
 	{
 		return UserPartner::where('status', PartnerStatus::PENDING)
-			->where('requested_by', $user->id)
-			->paginate(10);
+				->where('requested_by', $user->id)
+				->with('requestedUser', 'confirmedUser')
+				->paginate(10);
 	}
 
 	/**
@@ -67,8 +73,9 @@ class PartnerRepository implements PartnerRepositoryInterface
 	public function getBlockedPatners(User $user)
 	{
 		return UserPartner::where('status', PartnerStatus::BLOCKED)
-			->where('requested_by', $user->id)
-			->paginate(10);
+				->where('requested_by', $user->id)
+				->with('requestedUser', 'confirmedUser')
+				->paginate(10);
 	}
 
 	/**
@@ -86,5 +93,5 @@ class PartnerRepository implements PartnerRepositoryInterface
 	{
 		return UserPartner::destroy($userPartner->id);
 	}
-
+	
 }

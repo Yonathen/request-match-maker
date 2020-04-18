@@ -14,6 +14,6 @@ class NotificationType extends Enum
 {
     const NEW_OFFER = 'New Offer';
     const NEW_REQUEST_MAIL = 'New Mail';
-    const NEW_PARTNER_REQUEST = 'New Partner Rewquest';
+    const NEW_PARTNER_REQUEST = 'New Partner Request';
     const NEW_PARTNER = 'New Partner';
 }

@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function(){
 	Route::group(['middleware' => 'auth:api'], function() {
         Route::get('profile', 'UserController@profile');
 		Route::get('user/partners', 'UserController@getPartnerData');
-		Route::get('user/notifications', 'UserController@getMyNotifications');
+		Route::get('user/notifications', 'UserController@getMyNotifications')->name('notifications');
 
 		Route::post('partner/request', 'PartnerController@requestPartnership');
 		Route::post('partner/confirm', 'PartnerController@confirmPartner');

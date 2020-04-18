@@ -59,6 +59,18 @@ class PartnerRepository implements PartnerRepositoryInterface
 	/**
 	 * @param User $user
      */
+	public function getReceivedPatnerRequest($userI, $userII)
+	{
+		return UserPartner::where('status', PartnerStatus::PENDING)
+				->where('requested_by', $userI->id)
+				->where('confirmed_by', $userII->id)
+				->with('requestedUser', 'confirmedUser')
+				->first();
+	}
+
+	/**
+	 * @param User $user
+     */
 	public function getSelfPatnerRequests(User $user)
 	{
 		return UserPartner::where('status', PartnerStatus::PENDING)

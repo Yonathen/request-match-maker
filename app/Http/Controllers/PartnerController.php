@@ -21,6 +21,9 @@ use App\Enums\PartnerStatus;
 use App\Enums\ReturnType;
 use App\Enums\NotificationType;
 
+use App\Mail\PartnerEmail;
+use Illuminate\Support\Facades\Mail;
+
 class PartnerController extends Controller
 {
     use R;
@@ -39,14 +42,19 @@ class PartnerController extends Controller
         $this->notificationRepository = $notificationRepository;
     }
 
-    
+    public function validateRequest($requestingUser, $confirmingUser)
+    {
+        return ( !is_null($confirmingUser) &&
+            is_null( $this->partnerRepository->getPatner( $requestingUser, $confirmingUser ) ) &&
+            $requestingUser->email !== $confirmingUser->email );
+    }
 
     public function requestPartnership(Request $request) {
         $this->type = 'requestPartnership';
         try {
             $requestingUser = $this->userRepository->getAuthUser();
             $confirmingUser = $this->userRepository->getUser('email', $request->email);
-            if ( is_null($confirmingUser) || !is_null( $this->partnerRepository->getPatner( $requestingUser, $confirmingUser ) ) ) {
+            if ( !$this->validateRequest( $requestingUser, $confirmingUser ) ) {
                 throw (new Exception("Failed to request partnership.", 1));
             }
 
@@ -58,12 +66,10 @@ class PartnerController extends Controller
                 throw (new Exception("Failed to request partnership.", 1));
             }
 
-            $notification = new Notification;
-            $notification->type = NotificationType::NEW_PARTNER;
-            $notification->title = "New partner request ";
-            $notification->content = "You have new partner request from ".$requestingUser->name;
-            $notification->accessValue = [ "requestedBy" => [ "name" => $requestingUser->name, "email" =>$requestingUser->email ] ];
+            $notification = new Notification(NotificationType::NEW_PARTNER_REQUEST, [ "name" => $requestingUser->name, "email" =>$requestingUser->email ]);
             $this->notificationRepository->sendNotification($confirmingUser, $notification);
+
+            Mail::to($confirmingUser->email)->send(new PartnerEmail($requestingUser, $confirmingUser, NotificationType::NEW_PARTNER_REQUEST));
 
             $this->returnValue = $newPartner;
         } catch (Exception $e) {
@@ -73,13 +79,24 @@ class PartnerController extends Controller
         return $this->getResponse();
     }
 
+    public function validateConfirm($requestingUser, $confirmingUser, $partnerToConfrim)
+    {
+        $partnerToConfrim = $this->partnerRepository->getPatner( $requestingUser, $confirmingUser );
+        return ( 
+            !is_null($requestingUser) &&
+            !( is_null( $partnerToConfrim ) && $partnerToConfrim->confirmed_by !== $confirmingUser->id ) &&
+            $requestingUser->email !== $confirmingUser->email &&
+            $partnerToConfrim->confirmed_by 
+        );
+    }
+
     public function confirmPartner(Request $request) {
         $this->type = 'confrimPartner';
         try {
             $confirmingUser = $this->userRepository->getAuthUser();
             $requestingUser = $this->userRepository->getUser( 'email', $request->email );
-            $partnerToConfrim = $this->partnerRepository->getPatner( $requestingUser, $confirmingUser );
-            if ( is_null($requestingUser) || (is_null( $partnerToConfrim ) && $partnerToConfrim->confirmed_by !== $confirmingUser->id) ) {
+            $partnerToConfrim = $this->partnerRepository->getReceivedPatnerRequest( $requestingUser, $confirmingUser );
+            if ( is_null($partnerToConfrim) ) {
                 throw (new Exception("Failed to confirm partnership.", 1));
             }
 
@@ -88,12 +105,11 @@ class PartnerController extends Controller
                 throw (new Exception("Failed to confirm partnership.", 1));
             }
 
-            $notification = new Notification;
-            $notification->type = NotificationType::NEW_PARTNER;
-            $notification->title = "New partner";
-            $notification->content = "Your request for partnership to ".$confirmingUser->name." has been accepted.";
-            $notification->accessValue = [ "requestedBy" => [ "name" => $confirmingUser->name, "email" =>$confirmingUser->email ] ];
+            $notification = new Notification(NotificationType::NEW_PARTNER, [ "name" => $confirmingUser->name, "email" =>$confirmingUser->email ]);
             $this->notificationRepository->sendNotification($requestingUser, $notification);
+
+
+            Mail::to($requestingUser->email)->send(new PartnerEmail($requestingUser, $confirmingUser, NotificationType::NEW_PARTNER));
 
             $this->returnValue = $partnerToConfrim;
         } catch (Exception $e) {
@@ -116,7 +132,10 @@ class PartnerController extends Controller
             if ( !$this->partnerRepository->removePartner($partnerToRemove) ) {
                 throw (new Exception("Failed to remove partnership.", 1));
             }
-
+            
+            $this->removePartnerNotifications($partnerUser, $authUser->email);
+            $this->removePartnerNotifications($authUser, $partnerUser->email);
+            
             $this->returnValue = $partnerToRemove;
         } catch (Exception $e) {
             $this->failedRequest($e);
@@ -124,6 +143,18 @@ class PartnerController extends Controller
 
         return $this->getResponse();
 
+    }
+
+    public function removePartnerNotifications($user, $email) {
+        $notificationResult = $this->notificationRepository->searchNotification($user, NotificationType::NEW_PARTNER, $email);
+        if ( is_null ( $notificationResult ) ) {
+            $notificationResult = $this->notificationRepository->searchNotification($user, NotificationType::NEW_PARTNER_REQUEST, $email);
+        }
+
+        
+        if ( !is_null ( $notificationResult ) ) {
+            $this->notificationRepository->removeNotification($user, $notificationResult['id']);
+        }
     }
 
     public function blockPartner(Request $request) {

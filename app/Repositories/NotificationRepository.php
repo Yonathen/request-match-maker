@@ -16,13 +16,13 @@ class NotificationRepository implements NotificationRepositoryInterface
      */
 	public function sendNotification(User $user, Notification $notification)
 	{
-		$notifications = $user->notifications;
-		if (!is_null($notifications)) {
-			array_push($notifications, $notification);
+		$userNotifications = $user->notifications;
+		if (!is_null($userNotifications)) {
+			array_push($userNotifications, $notification);
 		} else {
-			$notifications = [$notification];
+			$userNotifications = [$notification];
 		}
-		$user->notifications = $notification;
+		$user->notifications = $userNotifications;
 		return $user->save();
 	}
 
@@ -49,6 +49,35 @@ class NotificationRepository implements NotificationRepositoryInterface
 	{
 		$user->notifications = [];
 		return $user->save();
+	}
+	
+	/**
+    * @param User $user
+    * @param string $type
+    * @param string $email
+	*/
+	public function searchNotification($user, $type, $email)
+	{
+		$userNotifications = $user->notifications;
+		if ( is_null($userNotifications) || count($userNotifications) === 0 ) {
+			return null;
+		}
+
+		$result = array_filter($userNotifications, function($value) use ($type, $email) {
+			
+			return ( 
+				!is_null($value['type'] )  && 
+				$value['type'] === $type  && 
+				!is_null( $value['accessValue']['email'] ) && 
+				$value['accessValue']['email'] === $email 
+			);
+		});
+
+		if (count($result) === 0) {
+			return null;
+		}
+
+		return $result[0];
 	}
 
 }

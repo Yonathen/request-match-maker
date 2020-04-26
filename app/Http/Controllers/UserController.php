@@ -2,33 +2,45 @@
 
 namespace App\Http\Controllers;
 use App\model\User; 
+
 use Illuminate\Http\Request; 
+
+use App\Http\Resources\ResponseResource;
+use App\Http\Resources\ResponseCollection;
+
+use League\Flysystem\Exception;
+
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\PartnerRepositoryInterface;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
-use App\Http\Resources\ResponseResource;
-use App\Http\Resources\ResponseCollection;
+use App\Repositories\Interfaces\FileRepositoryInterface;
+
 use App\Enums\ReturnType;
-use League\Flysystem\Exception;
+use App\Enums\FileLocations;
+
 use App\Utility\R;
 
 class UserController extends Controller
 {
     use R;
 
+    private $fileRepository;
     private $userRepository;
     private $partnerRepository;
     private $notificationRepository;
+
     protected $userRole;
 
     public function __construct(
         UserRepositoryInterface $userRepository, 
         PartnerRepositoryInterface $partnerRepository,
-        NotificationRepositoryInterface $notificationRepository)
+        NotificationRepositoryInterface $notificationRepository,
+        FileRepositoryInterface $fileRepository)
     {
         $this->userRepository = $userRepository;
         $this->partnerRepository = $partnerRepository;
         $this->notificationRepository = $notificationRepository;
+        $this->fileRepository = $fileRepository;
     }
     
     public function profile() {
@@ -111,18 +123,22 @@ class UserController extends Controller
         $this->returnType = ReturnType::SINGLE;
         try {
             $this->status = true;
-            if(is_null($token)){
+            if( is_null($token) ){
                 throw (new Exception("Invalid token", 1)); 
             }
 
             $user = $this->userRepository->getUser('email_verification_token', $token);
-            if( is_null($user) ){
+            if ( is_null($user) ){
                 throw (new Exception("Invalid token", 1)); 
             }
 
-            if(!$this->userRepository->verifyEmail($user)) {
+            if ( !$this->userRepository->verifyEmail($user) ) {
                 throw (new Exception("Failed to verify", 1)); 
             }
+
+            $directoryPrefix = FileLocations::UPLOADS . '/'  . $user->id . '/';
+            $this->fileRepository->createDirectory($directoryPrefix . FileLocations::PROFILE);
+            $this->fileRepository->createDirectory($directoryPrefix . FileLocations::TRADER);
 
             $this->returnValue = $user;
             

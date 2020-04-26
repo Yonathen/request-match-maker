@@ -8,7 +8,7 @@ use App\model\User;
 use App\model\UserPartner;
 use App\Enums\PartnerStatus;
 
-use App\Utility\UserBase;
+use App\Utility\BaseUser;
 
 use App\Repositories\Interfaces\PartnerRepositoryInterface;
 

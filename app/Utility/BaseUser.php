@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 use App\model\User; 
 
-class UserBase
+class BaseUser
 {
     /** @var int */
 	public $name;
@@ -25,14 +25,13 @@ class UserBase
 
 	/** @var string */
 	public $language;
+
+	public function __construct() {
+	}
 	
-	public function __construct(User $user) {
-		$this->name = $user->name;
-		$this->email = $user->email;
-		$this->logo = $user->logo;
-		$this->address = $user->address;
-		$this->website = $user->website;
-		$this->language = $user->language;
+	public function getAttributes() 
+	{
+		return ['id', 'name', 'email', 'logo', 'address', 'website', 'language'];
 	}
 
 }

@@ -30,12 +30,11 @@ class CreateRequestMailMatch extends Migration
         Schema::create('request_mail_match', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->date('date');
             $table->enum('status', ['New', 'Viewed', 'Archived']);
-            $table->enum('tyep', ['Match', 'Shared', 'Imported']);
+            $table->enum('type', ['Match', 'Shared', 'Imported']);
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('ext_id'); // Has to be studied
+            $table->unsignedBigInteger('shared_by')->nullable();
 
             $table->foreign('request_id')->references('id')->on('request');
             $table->foreign('user_id')->references('id')->on('user');

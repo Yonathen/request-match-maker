@@ -34,7 +34,7 @@ class RequestOfferRepository implements RequestOfferRepositoryInterface
 	 * @param string $columnName
 	 * @param string $columnValue
      */
-	public function getRequestOfferList($columnName = 'status', $columnValue = OfferStatus::NEW)
+	public function getRequestOfferList($columnValue = OfferStatus::NEW, $columnName = 'status')
 	{
 		return RequestOffer::select(BaseOffer::getAttributes())
 			->where($columnName, $columnValue)
@@ -47,7 +47,7 @@ class RequestOfferRepository implements RequestOfferRepositoryInterface
 	 * @param string $columnName
 	 * @param string $columnValue
      */
-	public function getRequestOfferByUser(User $user, $columnName = 'status', $columnValue = OfferStatus::NEW)
+	public function getRequestOfferByUser(User $user, $columnValue = OfferStatus::NEW, $columnName = 'status')
 	{
 		return RequestOffer::select(BaseOffer::getAttributes())
 			->where($columnName, $columnValue)

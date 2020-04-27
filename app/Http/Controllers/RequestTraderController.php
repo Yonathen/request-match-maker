@@ -7,6 +7,7 @@ use App\model\RequestTrader;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\RequestTraderRepositoryInterface;
+use App\Repositories\Interfaces\RequestMailRepositoryInterface;
 
 use Illuminate\Http\Request; 
 use App\Http\Resources\ResponseResource;
@@ -17,6 +18,7 @@ use App\Utility\R;
 use App\Utility\Address;
 
 use App\Enums\ReturnType;
+use App\Enums\RequestMailType;
 
 class RequestTraderController extends Controller
 {
@@ -24,16 +26,19 @@ class RequestTraderController extends Controller
     private $userRepository;
     private $requestTraderRepository;
     private $requestMatchMakerRepository;
+    private $requestMailRepository;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
         RequestMatchMakerRepositoryInterface $requestMatchMakerRepository,
-        RequestTraderRepositoryInterface $requestTraderRepository)
+        RequestTraderRepositoryInterface $requestTraderRepository,
+        RequestMailRepositoryInterface $requestMailRepository)
     {
         $this->middleware('auth:api');
         $this->userRepository = $userRepository;
         $this->requestTraderRepository = $requestTraderRepository;
         $this->requestMatchMakerRepository = $requestMatchMakerRepository;
+        $this->requestMailRepository = $requestMailRepository;
     }
 
     /**
@@ -78,7 +83,8 @@ class RequestTraderController extends Controller
 
             $requestMatchMakers  = $this->requestMatchMakerRepository->getRequestMatch($requestTrader);
             foreach ( $requestMatchMakers as $value ) {
-                
+                $mailInput = [ "email" => $value->user->email, "request_id" => $requestTrader->id, "type" => RequestMailStatus::MATCH ];
+                $this->requestMailRepository->createMail($mailInput);
             }
 
             $this->returnValue = $requestTrader;

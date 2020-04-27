@@ -14,9 +14,14 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\PartnerRepositoryInterface;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
 use App\Repositories\Interfaces\FileRepositoryInterface;
+use App\Repositories\Interfaces\RequestTraderRepositoryInterface;
+use App\Repositories\Interfaces\RequestOfferRepositoryInterface;
+use App\Repositories\Interfaces\RequestMailRepositoryInterface;
+use App\Repositories\Interfaces\RequestMatchMakerRepositoryInterface;
 
 use App\Enums\ReturnType;
 use App\Enums\FileLocations;
+use App\Enums\RequestStatus;
 
 use App\Utility\R;
 
@@ -26,6 +31,10 @@ class UserController extends Controller
 
     private $fileRepository;
     private $userRepository;
+    private $requestTraderRepository;
+    private $requestOfferRepository;
+    private $requestMailRepository;
+    private $requestMatchMakerRepository;
     private $partnerRepository;
     private $notificationRepository;
 
@@ -33,6 +42,10 @@ class UserController extends Controller
 
     public function __construct(
         UserRepositoryInterface $userRepository, 
+        RequestTraderRepositoryInterface $requestTraderRepository,
+        RequestOfferRepositoryInterface $requestOfferRepository,
+        RequestMailRepositoryInterface $requestMailRepository,
+        RequestMatchMakerRepositoryInterface $requestMatchMakerRepository,
         PartnerRepositoryInterface $partnerRepository,
         NotificationRepositoryInterface $notificationRepository,
         FileRepositoryInterface $fileRepository)
@@ -41,6 +54,10 @@ class UserController extends Controller
         $this->partnerRepository = $partnerRepository;
         $this->notificationRepository = $notificationRepository;
         $this->fileRepository = $fileRepository;
+        $this->requestTraderRepository = $requestTraderRepository;
+        $this->requestOfferRepository = $requestOfferRepository;
+        $this->requestMailRepository = $requestMailRepository;
+        $this->requestMatchMakerRepository = $requestMatchMakerRepository;
     }
     
     public function profile() {
@@ -159,23 +176,80 @@ class UserController extends Controller
 
     /// -- My TRADER -- ///
     public function getMyRequests(Request $request) {
+        $this->type = 'getMyRequests';
+        try {
+            $user = $this->userRepository->getAuthUser();
+            $this->returnType = ReturnType::COLLECTION;
 
+            $result = $this->requestTraderRepository->getRequestTraderByUser($user, $request->type);
+            
+            if (is_null($result)) {
+                throw (new Exception("Failed to get data.", 1));
+            }
+            $this->returnValue = $result;
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
     }
 
     public function getMyOffers(Request $request) {
+        $this->type = 'getMyOffer';
+        try {
+            $user = $this->userRepository->getAuthUser();
+            $this->returnType = ReturnType::COLLECTION;
+            
+            $result = $this->requestOfferRepository->getRequestOfferByUser($user, $request->type);
+            
+            if (is_null($result)) {
+                throw (new Exception("Failed to get data.", 1));
+            }
+            $this->returnValue = $result;
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
 
+        return $this->getResponse();
     }
 
     public function getMyMail(Request $request) {
+        // This is for archive and mail
+        $this->type = 'getMyMail';
+        try {
+            $user = $this->userRepository->getAuthUser();
+            $this->returnType = ReturnType::COLLECTION;
+            
+            $result = $this->requestMailRepository->getRequestMailByUser($user, $request->type);
+            
+            if (is_null($result)) {
+                throw (new Exception("Failed to get data.", 1));
+            }
+            $this->returnValue = $result;
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
 
+        return $this->getResponse();
     }
 
     public function getMyMatchmakers(Request $request) {
-        
-    }
+        $this->type = 'getMyMatchmakers';
+        try {
+            $user = $this->userRepository->getAuthUser();
+            $this->returnType = ReturnType::COLLECTION;
+            
+            $result = $this->requestMatchMakerRepository->getRequestMatchMakerByUser($user);
+            
+            if (is_null($result)) {
+                throw (new Exception("Failed to get data.", 1));
+            }
+            $this->returnValue = $result;
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
 
-    public function getMyArchives(Request $request) {
-        
+        return $this->getResponse();
     }
 
     /// -- My PARTNERSHIP -- ///

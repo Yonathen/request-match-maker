@@ -6,42 +6,23 @@ use App\model\RequestTrader;
 
 interface FileRepositoryInterface
 {
-	/** 
-	 * @param  array  $data
-     */
-    public function validator(array $data);
+	
+	public function getAllDirectory( $directoryName );
 
-	/**
-	 * @param string $columnName
-	 * @param string $columnValue
-     */
-	public function getRequestTraderList($columnName = 'status', $columnValue = RequestStatus::OPEN);
+	public function createDirectory( $directoryName );
 
-	/**
-	 * @param User $user
-	 * @param string $columnName
-	 * @param string $columnValue
-     */
-	public function getRequestTraderByUser(User $user, $columnName = 'status', $columnValue = RequestStatus::OPEN);
+	public function deleteDirectory( $directoryName );
 
-	/**
-	 * @param int $id
-     */
-	public function getRequestTraderById(int $id);
+	public function getAllFiles ( $directoryName );
 
-	/**
-	 * @param array $conditions
-     */
-	public function getRequestTraderByConditions($conditions);
+	public function getFile ( $fileName );
+	
+	public function deleteFileOrFiles ( $fileNameorNames );
+	
+	public function upload( $files, $location, $fileType = FileMimeType::ALL, $operationType = FileOperationType::SINGLE);
 
-	/**
-     * @param RequestTrader $request
-     */
-	public function saveRequestTrader(RequestTrader $request);
+    function validator($file, $type);
 
-	/**
-     * @param RequestTrader $request
-     */
-	public function removeRequestTrader(RequestTrader $request);
+	function putFile($location, $file, $type);
 
 }

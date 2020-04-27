@@ -103,7 +103,7 @@ class RequestMailRepository implements RequestMailRepositoryInterface
 	 * @param string $columnName
 	 * @param string $columnValue
      */
-	public function getRequestMailByUser(User $user, $columnName = 'type', $columnValue = RequestMailType::MATCH)
+	public function getRequestMailByUser(User $user, $columnValue = RequestMailType::MATCH, $columnName = 'type')
 	{
 		return RequestMailMatch::where($columnName, $columnValue)
 			->where('user_id', $user->id)

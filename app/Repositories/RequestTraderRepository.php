@@ -35,7 +35,7 @@ class RequestTraderRepository implements RequestTraderRepositoryInterface
 	 * @param string $columnName
 	 * @param string $columnValue
      */
-	public function getRequestTraderList($columnName = 'status', $columnValue = RequestStatus::OPEN)
+	public function getRequestTraderList($columnValue = RequestStatus::OPEN, $columnName = 'status')
 	{
 		return RequestTrader::select(BaseRequest::getAttributes())
 			->where($columnName, $columnValue)
@@ -46,10 +46,10 @@ class RequestTraderRepository implements RequestTraderRepositoryInterface
 
 	/**
 	 * @param User $user
-	 * @param string $columnName
 	 * @param string $columnValue
+	 * @param string $columnName
      */
-	public function getRequestTraderByUser(User $user, $columnName = 'status', $columnValue = RequestStatus::OPEN)
+	public function getRequestTraderByUser(User $user, $columnValue = RequestStatus::OPEN, $columnName = 'status')
 	{
 		return RequestTrader::select(BaseRequest::getAttributes())
 			->where($columnName, $columnValue)

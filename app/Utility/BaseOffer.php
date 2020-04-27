@@ -29,7 +29,7 @@ class BaseOffer
 	public function __construct() {
 	}
 	
-	public function getAttributes() 
+	public static function getAttributes() 
 	{
 		return ['created_at', 'price', 'currency', 'offer_no', 'staus'];
 	}

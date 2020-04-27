@@ -12,6 +12,10 @@ class RequestMatchMaker extends Model
 
     protected $hidden = [ 'user_id', ];
 
+    protected $casts = [
+        'keywords' => 'array', 'location' => 'array',
+    ];
+
     public function user() 
     {
     	return $this->belongsTo('App\model\User')->select(BaseUser::getAttributes());

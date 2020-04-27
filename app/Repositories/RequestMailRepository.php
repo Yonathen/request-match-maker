@@ -14,6 +14,7 @@ use App\Enums\RequestMailType;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\RequestMailRepositoryInterface;
 use App\Repositories\Interfaces\RequestTraderRepositoryInterface;
+use App\Repositories\Interfaces\NotificationRepositoryInterface;
 
 use App\Mail\RequestTraderMail;
 use Illuminate\Support\Facades\Mail;

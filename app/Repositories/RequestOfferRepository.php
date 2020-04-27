@@ -4,6 +4,7 @@ namespace App\Repositories;
 use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
 
+use App\model\User;
 use App\model\RequestTrader;
 use App\model\RequestOffer;
 

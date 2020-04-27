@@ -21,8 +21,8 @@ interface FileRepositoryInterface
 	
 	public function upload( $files, $location, $fileType = FileMimeType::ALL, $operationType = FileOperationType::SINGLE);
 
-    function validator($file, $type);
+    public function validator($file, $type);
 
-	function putFile($location, $file, $type);
+	public function putFile($location, $file, $type);
 
 }

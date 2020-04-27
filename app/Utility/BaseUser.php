@@ -29,7 +29,7 @@ class BaseUser
 	public function __construct() {
 	}
 	
-	public function getAttributes() 
+	public static function getAttributes() 
 	{
 		return ['id', 'name', 'email', 'logo', 'address', 'website', 'language'];
 	}

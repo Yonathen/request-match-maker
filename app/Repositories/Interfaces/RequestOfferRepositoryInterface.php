@@ -6,33 +6,38 @@ use App\model\RequestOffer;
 
 interface RequestOfferRepositoryInterface
 {
-    /**
+    /** 
+	 * @param  array  $data
+     */
+    public function validator(array $data);
+
+	/**
 	 * @param string $columnName
 	 * @param string $columnValue
      */
-	public function getRequestOfferList($columnName = 'status', $columnValue = OfferStatus::NEW);
+	public function getRequestOfferList($columnValue, $columnName);
 
 	/**
 	 * @param User $user
 	 * @param string $columnName
 	 * @param string $columnValue
      */
-	public function getRequestOfferByUser(User $user, $columnName = 'status', $columnValue = OfferStatus::NEW);
+	public function getRequestOfferByUser(User $user, $columnValue, $columnName);
 
 	/**
-	 * @param RequestOffer $requestOffer
+	 * @param int $id
      */
-	public function getRequestOfferDetailById(RequestOffer $requestOffer);
+	public function getRequestOfferDetailById(int $id);
 
 	/**
 	 * @param array $conditions
      */
-	public function getRequestOfferDetailByConditions($conditions);
+	public function getRequestOfferByConditions($conditions);
 
 	/**
      * @param RequestOffer $requestOffer
      */
-	public function saveRequest(RequestOffer $requestOffer);
+	public function saveRequestOffer(RequestOffer $requestOffer);
 
 	/**
      * @param RequestOffer $requestOffer

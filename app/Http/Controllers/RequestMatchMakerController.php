@@ -47,7 +47,7 @@ class RequestMatchMakerController extends Controller
         try {
             
             $this->status = true;
-            $input = $request->all();
+            $input = $request->json()->all();
             $validator = $this->matchMakerRepository->validator($input);
             if($validator->fails()){
                 throw (new Exception($validator->errors(), 1));   
@@ -58,13 +58,15 @@ class RequestMatchMakerController extends Controller
 
 
             $requestMatchMaker->user_id = $user->id;
-            $requestMatchMaker->title = $input->title;
-            $requestMatchMaker->keywords = $input->keywords;
-            $requestMatchMaker->location = [];
-            foreach ($input->location as $location ) {
-                array_push($requestMatchMaker->location, new Address($location));
+            $requestMatchMaker->title = $input["title"];
+            $requestMatchMaker->keywords = $input["keywords"];
+            $locations = [];
+            foreach ($input["location"] as $location ) {
+                $newLocation = new Address($location);
+                $newLocation->minmizeProperty();
+                array_push($locations, $newLocation);
             }
-            
+            $requestMatchMaker->location = $locations;
             if ( !$this->matchMakerRepository->saveRequestMatchMaker($requestMatchMaker) ) {
                 throw (new Exception("Failed to create match maker.", 1));
             }
@@ -115,23 +117,27 @@ class RequestMatchMakerController extends Controller
         $this->returnType = ReturnType::SINGLE;
         try {
             $input = $request->all();
+            $user = $this->userRepository->getAuthUser();
             $validator = $this->matchMakerRepository->validator($input);
-            $requestMatchMaker = $this->matchMakerRepository->getRequestMatchMakerByConditions(['id' =>  $id]);
+            $requestMatchMaker = $this->matchMakerRepository->getRequestMatchMakerByConditions(['id' =>  $id, 'user_id' =>  $user->id]);
             if($validator->fails()){
                 throw (new Exception($validator->errors(), 1));   
             } else if (is_null($requestMatchMaker)) {
                 throw (new Exception("Failed to update Request Match Maker.", 1));
             }
 
-            $requestMatchMaker->title = $input->title;
-            $requestMatchMaker->keywords = $input->keywords;
-            $requestMatchMaker->location = [];
-            foreach ($input->location as $location ) {
-                array_push($requestMatchMaker->location, new Address($location));
+            $requestMatchMaker->user_id = $user->id;
+            $requestMatchMaker->title = $input["title"];
+            $requestMatchMaker->keywords = $input["keywords"];
+            $locations = [];
+            foreach ($input["location"] as $location ) {
+                $newLocation = new Address($location);
+                $newLocation->minmizeProperty();
+                array_push($locations, $newLocation);
             }
-
+            $requestMatchMaker->location = $locations;
             if ( !$this->matchMakerRepository->saveRequestMatchMaker($requestMatchMaker) ) {
-                throw (new Exception("Failed to update Request Match Maker.", 1));
+                throw (new Exception("Failed to create match maker.", 1));
             }
 
             $this->returnValue = $requestMatchMaker;
@@ -155,7 +161,7 @@ class RequestMatchMakerController extends Controller
         $this->returnType = ReturnType::SINGLE;
         try {
             $this->status = false;
-            $matchMaker = $this->matchMakerRepository->getRequestMatchMakerByConditions(['id' =>  $id]);
+            $matchMaker = $this->matchMakerRepository->getRequestMatchMakerByConditions(['id' =>  $id, 'user_id' =>  $user->id]);
             if (!is_null($matchMaker) && $this->matchMakerRepository->removeRequestMatchMaker($matchMaker) ) {
                 $this->status = true;
             }

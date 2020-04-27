@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 use App\model\User;
@@ -64,7 +65,7 @@ class RequestMatchMakerRepository implements RequestMatchMakerRepositoryInterfac
 			{
 				$query->where($column, '=', $value);
 			}
-		return $query->get();
+		return $query->with('user')->first();
 	}
 
 	/**

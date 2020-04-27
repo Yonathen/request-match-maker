@@ -23,6 +23,7 @@ use App\Repositories\PartnerRepository;
 use App\Repositories\RequestMailRepository;
 use App\Repositories\RequestOfferRepository;
 use App\Repositories\RequestTraderRepository;
+use App\Repositories\RequestMatchMakerRepository;
 use App\Repositories\FileRepository;
 
 use Illuminate\Support\ServiceProvider;

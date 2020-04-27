@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class Address
 {
-    /** @var int */
+    /** @var string */
 	public $id;
 
 	/** @var string */
@@ -43,7 +43,6 @@ class Address
 	public $default;
 
 	public function __construct($address) {
-
 		$this->id = Str::random(16);
 		$this->name = $address["name"];
 		$this->phone = $address["phone"];
@@ -55,6 +54,16 @@ class Address
 		$this->country = $address["country"];
 		$this->lon = $address["lon"];
 		$this->lat = $address["lat"];
-		$this->default = $address[""];
+		/*if ( !is_null ( $address["default"] ) ) {
+			$this->default = $address["default"];
+		}*/
+	}
+
+	public function minmizeProperty () {
+		unset($this->default);
+		unset($this->email);
+		unset($this->address1);
+		unset($this->address2);
+		unset($this->postalCode);
 	}
 }

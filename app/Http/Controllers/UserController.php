@@ -85,7 +85,9 @@ class UserController extends Controller
             $this->status = true;
             $user = $this->userRepository->getUser('email', $request->email);
 
-            if ($user->email_verified !== 1) {
+            if ( is_null($user)) { 
+                throw (new Exception("Account with this email does not exist.", 1));
+            } elseif ($user->email_verified !== 1) {
                 throw (new Exception("Email not verified", 1));
             }
 

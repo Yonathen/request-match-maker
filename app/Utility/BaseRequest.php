@@ -32,7 +32,7 @@ class BaseRequest
 	public function __construct() {
 	}
 	
-	public function getAttributes() 
+	public static function getAttributes() 
 	{
 		return ['id', 'title', 'created_at', 'who', 'views'];
 	}

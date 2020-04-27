@@ -98,7 +98,7 @@ class FileRepository implements FileRepositoryInterface
 	 * @param  array  $data
 	 * @param  string  $type
      */
-    private function validator($file, $type)
+    public function validator($file, $type)
     {
 
         return Validator::make([
@@ -108,7 +108,7 @@ class FileRepository implements FileRepositoryInterface
         ]);
 	}
 
-	private function putFile($location, $file, $type)
+	public function putFile($location, $file, $type)
 	{
 		$result = [ 'status' => true, 'content' => null ];
 		try {

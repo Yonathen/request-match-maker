@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\RequestStatus;
 
 class CreateRequest extends Migration
 {
@@ -34,16 +35,18 @@ class CreateRequest extends Migration
         Schema::create('request', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->dateTime('date_time', 0);
-            $table->string('subject', 250);
-            $table->enum('status', ['OPEN', 'CLOSED', 'NEW_OFFER']);
-            $table->text('title');
-            $table->text('image');
-            $table->json('what');
-            $table->text('where');
-            $table->text('when');
-            $table->text('who');
-            $table->unsignedBigInteger('views');
+            $table->string('title', 250);
+            $table->json('images')->nullable();
+            $table->text('what');
+            $table->json('where');
+            $table->dateTimeTz('when', 0);
+            $table->string('who', 250);
+            $table->enum('status', [
+                RequestStatus::OPEN, 
+                RequestStatus::CLOSED
+            ])->default(RequestStatus::OPEN);
+            $table->boolean('edited')->default(false);
+            $table->unsignedBigInteger('views')->default(0);
             $table->unsignedBigInteger('user_id');
 
             $table->foreign('user_id')->references('id')->on('user');

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\OfferStatus;
 
 class CreateRequestOffer extends Migration
 {
@@ -31,12 +32,17 @@ class CreateRequestOffer extends Migration
         Schema::create('request_offer', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->dateTime('date_time', 0);
-            $table->unsignedBigInteger('offer_no');
             $table->string('price', 9);
             $table->string('currency', 5);
-            $table->json('message_exchange');
-            $table->enum('status', ['New', 'Viewed', 'Selected', 'Rejected', 'Awarded']);
+            $table->string('offer_no', '8')->unique();
+            $table->json('message_exchange')->nullable();
+            $table->enum('status', [
+                OfferStatus::NEW, 
+                OfferStatus::VIEWED, 
+                OfferStatus::SELECTED, 
+                OfferStatus::REJECTED, 
+                OfferStatus::AWARDED
+            ])->default(OfferStatus::NEW);
             $table->unsignedBigInteger('request_id');
             $table->unsignedBigInteger('user_id');
 
@@ -45,7 +51,7 @@ class CreateRequestOffer extends Migration
         });
     }
 
-    /**
+    /** 
      * Reverse the migrations.
      *
      * @return void

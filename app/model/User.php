@@ -79,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function userRequest()
     {
-        return $this->hasMany('App\model\Request');
+        return $this->hasMany('App\model\RequestTrader');
     }
     
 }

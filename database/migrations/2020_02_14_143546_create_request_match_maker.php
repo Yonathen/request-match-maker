@@ -29,7 +29,7 @@ class CreateRequestMatchMaker extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->string('title', 250);
-            $table->text('keywords');
+            $table->json('keywords');
             $table->json('location');
             $table->unsignedBigInteger('user_id');
 

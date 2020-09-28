@@ -31,17 +31,23 @@ class Notification
 
 		$this->type = $type;
 		$this->id = Str::random(16);
+		$this->title = $type;
 		$this->status = VisitStatus::NEW;
 		$this->accessValue = $accessValue;
-
+		
 		switch($type) {
 			case NotificationType::NEW_PARTNER:
-				$this->title = "New partner";
             	$this->content = "Your request for partnership to ".$accessValue['name']." has been accepted.";
 			break;
 			case NotificationType::NEW_PARTNER_REQUEST;
-            	$this->title = "New partner request";
             	$this->content = "You have new partner request from ".$accessValue['name'];
+			break;
+
+			case NotificationType::NEW_REQUEST_MAIL_SHARED:
+            	$this->content = $accessValue['sharedBy']['name'] . " has shared you a request titled " .  $accessValue['request']['title'];
+			break;
+			case NotificationType::NEW_REQUEST_MAIL_MATCH;
+				$this->content = "You have a matched request titled " .  $accessValue['request']['title'];
 			break;
 		}
 	}

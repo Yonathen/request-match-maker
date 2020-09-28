@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 use App\model\User;
@@ -27,7 +28,6 @@ class RequestTraderRepository implements RequestTraderRepositoryInterface
             'what' => ['required'],
             'where' => ['required'],
             'when' => ['required'],
-            'user_id' => ['required'],
         ]);
 	}
 

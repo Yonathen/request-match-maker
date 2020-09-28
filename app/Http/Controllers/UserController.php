@@ -78,6 +78,22 @@ class UserController extends Controller
         return $this->getResponse();
     }
     
+    /**
+     * @OA\Post(
+     *     path="/pet",
+     *     tags={"pet"},
+     *     summary="Add a new pet to the store",
+     *     operationId="addPet",
+     *     @OA\Response(
+     *         response=405,
+     *         description="Invalid input"
+     *     ),
+     *     security={
+     *         {"petstore_auth": {"write:pets", "read:pets"}}
+     *     },
+     *     requestBody={"$ref": "#/components/requestBodies/Pet"}
+     * )
+     */
     public function accessAccount(Request $request){ 
         $this->type = 'accessAccount';
         $this->returnType = ReturnType::SINGLE;

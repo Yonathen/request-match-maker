@@ -8,6 +8,7 @@ use App\model\RequestTrader;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\RequestTraderRepositoryInterface;
 use App\Repositories\Interfaces\RequestMailRepositoryInterface;
+use App\Repositories\Interfaces\RequestMatchMakerRepositoryInterface;
 
 use Illuminate\Http\Request; 
 use App\Http\Resources\ResponseResource;
@@ -19,6 +20,7 @@ use App\Utility\Address;
 
 use App\Enums\ReturnType;
 use App\Enums\RequestMailType;
+use App\Enums\FileLocations;
 
 class RequestTraderController extends Controller
 {
@@ -49,19 +51,19 @@ class RequestTraderController extends Controller
      */
     public function store(Request $request)
     {
-        $this->type = 'updateRequestTrader';
+        $this->type = 'CreateRequestTrader';
         $this->returnType = ReturnType::SINGLE;
         try {
             $input = $request->json()->all();
             $validator = $this->requestTraderRepository->validator($input);
             if( $validator->fails() ){
-                throw (new Exception("Failed to update request trader.", 1));   
+                throw (new Exception($validator->errors(), 1));   
             }
             
             $requestTrader = new RequestTrader;
             $user = $this->userRepository->getAuthUser();
             $location = FileLocations::UPLOADS . '/'  . $user->id . '/' . FileLocations::TRADER;
-            if ( !is_null( $input["images"] ) ) {
+            if ( isset($input["images"]) && !is_null( $input["images"] ) ) {
                 $fileUpload = $this->fileRepository->upload($input["images"], $location, FileMimeType::IMAGE);
                 if ( $fileUpload['status'] ) {
                     $requestTrader->images = $fileUpload["content"];
@@ -73,8 +75,8 @@ class RequestTraderController extends Controller
             $requestTrader->user_id = $user->id;
             $requestTrader->title = $input["title"];
             $requestTrader->what = $input["what"];
-            $requestTrader->where = $input["where"];
-            $requestTrader->when = new Address($input["when"]);
+            $requestTrader->where = new Address($input["where"]);
+            $requestTrader->when = $input["when"];
             $requestTrader->who = $input["who"];
 
             if ( !$this->requestTraderRepository->saveRequestTrader($requestTrader) ) {

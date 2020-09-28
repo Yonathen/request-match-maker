@@ -34,14 +34,15 @@ class RequestMatchMakerRepository implements RequestMatchMakerRepositoryInterfac
 		$result = RequestMatchMaker::select()->with('user')->get();
 		foreach ( $result as $value ) {
 			foreach ( $value['keywords'] as $keyword ) {
-				if ( preg_match ( $keyword, $requestTrader->title ) ||
-					 preg_match ( $keyword, $requestTrader->what ) ) {
+				$pattern = '/'. $keyword . '/';
+				if ( preg_match ( $pattern, $requestTrader->title ) ||
+					 preg_match ( $pattern, $requestTrader->what ) ) {
 					array_push ( $matchMakers, $value );
 				}
 			}
 		}
 
-		return $matchMakkers;
+		return $matchMakers;
 	}
 
 	/**

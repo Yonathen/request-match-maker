@@ -24,6 +24,7 @@ class RequestMatchMakerController extends Controller
     use R;
     private $userRepository;
     private $matchMakerRepository;
+    private User $user;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -47,13 +48,14 @@ class RequestMatchMakerController extends Controller
         try {
             
             $this->status = true;
+
+            $user = $this->userRepository->getAuthUser();
             $input = $request->json()->all();
             $validator = $this->matchMakerRepository->validator($input);
             if($validator->fails()){
                 throw (new Exception($validator->errors(), 1));   
             }
 
-            $user = $this->userRepository->getAuthUser();
             $requestMatchMaker = new RequestMatchMaker;
 
 
@@ -161,6 +163,7 @@ class RequestMatchMakerController extends Controller
         $this->returnType = ReturnType::SINGLE;
         try {
             $this->status = false;
+            $user = $this->userRepository->getAuthUser();
             $matchMaker = $this->matchMakerRepository->getRequestMatchMakerByConditions(['id' =>  $id, 'user_id' =>  $user->id]);
             if (!is_null($matchMaker) && $this->matchMakerRepository->removeRequestMatchMaker($matchMaker) ) {
                 $this->status = true;

@@ -78,12 +78,12 @@ class UserController extends Controller
         return $this->getResponse();
     }
 
-    public function profileById(Request $request) {
+    public function profileById($id = null) {
         $this->type = 'get_profile_by_id';
         $this->returnType = ReturnType::SINGLE;
         try {
             $this->status = true;
-            $retrievedUser = $this->userRepository->getUser('id', $request->id);
+            $retrievedUser = $this->userRepository->getUser('id', $id);
             if (is_null($retrievedUser)) {
                 throw (new Exception("Failed to retrieve User.", 1));
             }

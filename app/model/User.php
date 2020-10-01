@@ -10,15 +10,15 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, Notifiable;
-    
+
     protected $table = "user";
 
     protected $attributes = [
         'gender' => 'Male',
     ];
 
-    protected $fillable = [ 
-        'name', 'account_created_on', 'email', 'password', 'gender', 'email_verification_token',
+    protected $fillable = [
+        'name', 'account_created_by', 'email', 'password', 'gender', 'email_verification_token',
     ];
 
     protected $hidden = [ 'id', 'password', 'remember_token', 'email_verification_token', ];
@@ -32,32 +32,32 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\model\OauthAccessToken');
     }
 
-    public function userActivity() 
+    public function userActivity()
     {
     	return $this->hasMany('App\model\UserActivity');
     }
 
-    public function userAd() 
+    public function userAd()
     {
     	return $this->hasMany('App\model\UserAd');
     }
 
-    public function userFeedback() 
+    public function userFeedback()
     {
     	return $this->hasMany('App\model\UserFeedback');
     }
 
-    public function userInvite() 
+    public function userInvite()
     {
     	return $this->hasMany('App\model\UserInvite');
     }
 
-    public function userConfirmedPartner() 
+    public function userConfirmedPartner()
     {
     	return $this->hasMany('App\model\UserPartner', 'confirmed_by');
     }
 
-    public function userRequestedPartner() 
+    public function userRequestedPartner()
     {
     	return $this->hasMany('App\model\UserPartner', 'requested_by');
     }
@@ -81,5 +81,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany('App\model\RequestTrader');
     }
-    
+
 }

@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\model\User; 
+use App\model\User;
 
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 
 use App\Http\Resources\ResponseResource;
 use App\Http\Resources\ResponseCollection;
@@ -41,7 +41,7 @@ class UserController extends Controller
     protected $userRole;
 
     public function __construct(
-        UserRepositoryInterface $userRepository, 
+        UserRepositoryInterface $userRepository,
         RequestTraderRepositoryInterface $requestTraderRepository,
         RequestOfferRepositoryInterface $requestOfferRepository,
         RequestMailRepositoryInterface $requestMailRepository,
@@ -59,7 +59,7 @@ class UserController extends Controller
         $this->requestMailRepository = $requestMailRepository;
         $this->requestMatchMakerRepository = $requestMatchMakerRepository;
     }
-    
+
     public function profile() {
         $this->type = 'proifile';
         $this->returnType = ReturnType::SINGLE;
@@ -69,7 +69,7 @@ class UserController extends Controller
             if (is_null($retrievedUser)) {
                 throw (new Exception("Failed to retrieve User.", 1));
             }
-            
+
             $this->returnValue = $retrievedUser;
         } catch (Exception $e) {
             $this->failedRequest($e);
@@ -77,7 +77,25 @@ class UserController extends Controller
 
         return $this->getResponse();
     }
-    
+
+    public function profileById(Request $request) {
+        $this->type = 'get_profile_by_id';
+        $this->returnType = ReturnType::SINGLE;
+        try {
+            $this->status = true;
+            $retrievedUser = $this->userRepository->getUser('id', $request->id);
+            if (is_null($retrievedUser)) {
+                throw (new Exception("Failed to retrieve User.", 1));
+            }
+
+            $this->returnValue = $retrievedUser;
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
+    }
+
     /**
      * @OA\Post(
      *     path="/pet",
@@ -94,14 +112,14 @@ class UserController extends Controller
      *     requestBody={"$ref": "#/components/requestBodies/Pet"}
      * )
      */
-    public function accessAccount(Request $request){ 
+    public function accessAccount(Request $request){
         $this->type = 'accessAccount';
         $this->returnType = ReturnType::SINGLE;
         try {
             $this->status = true;
             $user = $this->userRepository->getUser('email', $request->email);
 
-            if ( is_null($user)) { 
+            if ( is_null($user)) {
                 throw (new Exception("Account with this email does not exist.", 1));
             } elseif ($user->email_verified !== 1) {
                 throw (new Exception("Email not verified", 1));
@@ -111,7 +129,7 @@ class UserController extends Controller
             if (is_null($userToken)) {
                 throw (new Exception("Failed to access account.", 1));
             }
-            
+
             $this->returnValue = $userToken;
         } catch (Exception $e) {
             $this->failedRequest($e);
@@ -120,7 +138,7 @@ class UserController extends Controller
         return $this->getResponse();
     }
 
-    public function logout(Request $request){ 
+    public function logout(Request $request){
         $this->type = 'logoutAccount';
         $this->returnType = ReturnType::SINGLE;
         try {
@@ -137,7 +155,7 @@ class UserController extends Controller
     }
 
 
-    public function logoutFromAllDevice(Request $request){ 
+    public function logoutFromAllDevice(Request $request){
         $this->type = 'logoutFromAllDevice';
         $this->returnType = ReturnType::SINGLE;
         try {
@@ -159,16 +177,16 @@ class UserController extends Controller
         try {
             $this->status = true;
             if( is_null($token) ){
-                throw (new Exception("Invalid token", 1)); 
+                throw (new Exception("Invalid token", 1));
             }
 
             $user = $this->userRepository->getUser('email_verification_token', $token);
             if ( is_null($user) ){
-                throw (new Exception("Invalid token", 1)); 
+                throw (new Exception("Invalid token", 1));
             }
 
             if ( !$this->userRepository->verifyEmail($user) ) {
-                throw (new Exception("Failed to verify", 1)); 
+                throw (new Exception("Failed to verify", 1));
             }
 
             $directoryPrefix = FileLocations::UPLOADS . '/'  . $user->id . '/';
@@ -176,20 +194,20 @@ class UserController extends Controller
             $this->fileRepository->createDirectory($directoryPrefix . FileLocations::TRADER);
 
             $this->returnValue = $user;
-            
+
         } catch (Exception $e) {
             $this->failedRequest($e);
         }
 
         return $this->getResponse();
     }
-    
+
     public function removeMyAccount(Request $request) {
-        
+
     }
 
     public function forgotAccount(Request $request) {
-        
+
     }
 
     /// -- My TRADER -- ///
@@ -200,7 +218,7 @@ class UserController extends Controller
             $this->returnType = ReturnType::COLLECTION;
 
             $result = $this->requestTraderRepository->getRequestTraderByUser($user, $request->type);
-            
+
             if (is_null($result)) {
                 throw (new Exception("Failed to get data.", 1));
             }
@@ -217,9 +235,9 @@ class UserController extends Controller
         try {
             $user = $this->userRepository->getAuthUser();
             $this->returnType = ReturnType::COLLECTION;
-            
+
             $result = $this->requestOfferRepository->getRequestOfferByUser($user, $request->type);
-            
+
             if (is_null($result)) {
                 throw (new Exception("Failed to get data.", 1));
             }
@@ -237,9 +255,9 @@ class UserController extends Controller
         try {
             $user = $this->userRepository->getAuthUser();
             $this->returnType = ReturnType::COLLECTION;
-            
+
             $result = $this->requestMailRepository->getRequestMailByUser($user, $request->type);
-            
+
             if (is_null($result)) {
                 throw (new Exception("Failed to get data.", 1));
             }
@@ -256,9 +274,9 @@ class UserController extends Controller
         try {
             $user = $this->userRepository->getAuthUser();
             $this->returnType = ReturnType::COLLECTION;
-            
+
             $result = $this->requestMatchMakerRepository->getRequestMatchMakerByUser($user);
-            
+
             if (is_null($result)) {
                 throw (new Exception("Failed to get data.", 1));
             }
@@ -292,7 +310,7 @@ class UserController extends Controller
                     $result = $this->partnerRepository->getBlockedPatners($user);
                 break;
             }
-            
+
             if (is_null($result)) {
                 throw (new Exception("Failed to get data.", 1));
             }

@@ -18,10 +18,11 @@ Route::prefix('v1')->group(function(){
 	Route::get('verify/{token}', 'UserController@verifyEmail')->name('verify');
 	Route::apiResource('pages', 'PageController');
 	Route::apiResource('pages/content', 'PageContentController');
-	
+
 	Route::group(['middleware' => 'auth:api'], function() {
 		Route::get('profile', 'UserController@profile');
-		
+        Route::get('profile/{id}', 'UserController@profileById')->name('id');
+
 		Route::get('user/partners', 'UserController@getPartnerData');
 
 		Route::get('user/request', 'UserController@getMyRequests');

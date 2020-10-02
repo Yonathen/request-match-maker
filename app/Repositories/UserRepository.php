@@ -1,12 +1,12 @@
-<?php 
+<?php
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\model\User;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class UserRepository implements UserRepositoryInterface 
+class UserRepository implements UserRepositoryInterface
 {
 
 	/**
@@ -15,6 +15,18 @@ class UserRepository implements UserRepositoryInterface
 	public function getAuthUser()
 	{
 		return Auth::user();
+    }
+
+    /**
+	 * @param  array  $data
+     */
+    public function validator(array $data)
+    {
+        return Validator::make($data, [
+			'name' => ['required', 'string', 'max:200'],
+            'email' => ['required', 'string'],
+            'account_created_by' => ['required']
+        ]);
 	}
 
 	/**
@@ -32,9 +44,9 @@ class UserRepository implements UserRepositoryInterface
      */
 	public function accessToken($data)
     {
-		if( Auth::attempt( [ 'email' => $data['email'], 'password' => $data['password'] ] ) ){ 
-			$user = Auth::user(); 
-			return [ 'token' => $user->createToken('MyYukel')-> accessToken]; 
+		if( Auth::attempt( [ 'email' => $data['email'], 'password' => $data['password'] ] ) ){
+			$user = Auth::user();
+			return [ 'token' => $user->createToken('MyYukel')-> accessToken];
 		}
 		return null;
     }
@@ -50,7 +62,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     public function logoutFromAllDevice()
-	{ 
+	{
 	    if (Auth::check()) {
 	       Auth::user()->AauthAcessToken()->delete();
 	       return true;
@@ -58,8 +70,6 @@ class UserRepository implements UserRepositoryInterface
 
 		return null;
 	}
-
-
 
     /**
      * @param User $user
@@ -71,5 +81,14 @@ class UserRepository implements UserRepositoryInterface
         $user ->email_verification_token = '';
         return $user->save();
     }
+
+     /**
+     * @param User $user
+     */
+	public function saveUser(User $user)
+	{
+		return $user->save();
+	}
+
 
 }

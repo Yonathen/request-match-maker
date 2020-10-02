@@ -202,6 +202,52 @@ class UserController extends Controller
         return $this->getResponse();
     }
 
+      /**
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfileDetail(Request $request)
+    {
+        $this->type = 'updateProfile';
+        $this->returnType = ReturnType::SINGLE;
+        try {
+            $input = $request->json()->all();
+
+            $retrievedUser = $this->userRepository->getAuthUser();
+            $validator = $this->userRepository->validator($input);
+            if( is_null($retrievedUser) || $validator->fails() ){
+                throw (new Exception("Failed to get user.", 1));
+            }
+
+            $location = FileLocations::UPLOADS . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
+            if ( !is_null( $input["logo"] ) ) {
+                $fileUpload = $this->fileRepository->upload($input["logo"], $location, FileMimeType::IMAGE);
+                if ( $fileUpload['status'] ) {
+                    $retrievedUser->logo = $fileUpload["content"][0];
+                } else {
+                    throw ($fileUpload['content']);
+                }
+            }
+
+            $retrievedUser->name = $input["name"];
+            $retrievedUser->account_created_by = $input["accountCreatedBy"];
+            $retrievedUser->email = $input["email"];
+            $retrievedUser->gender = $input["gender"];
+            $retrievedUser->established_on = $input["establishedOn"];
+            $retrievedUser->established_by = $input["establishedBy"];
+
+            if ( !$this->userRepository->saveUser($retrievedUser) ) {
+                throw (new Exception("Failed to update user.", 1));
+            }
+            $this->returnValue = $retrievedUser;
+
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
+    }
+
     public function removeMyAccount(Request $request) {
 
     }

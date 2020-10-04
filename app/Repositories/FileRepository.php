@@ -95,18 +95,19 @@ class FileRepository implements FileRepositoryInterface
     }
 
     public function fileUploadCroppedImage($croppedImage, $location, $name, $imageType) {
-        $result = [ 'status' => true, 'content' => null ];
+        $result = [ 'status' => false, 'content' => null ];
 
         list($type, $cropped_image) = explode(';', $croppedImage);
         list(, $cropped_image) = explode(',', $croppedImage);
         $croppedImage = base64_decode($croppedImage);
         $imageName = $name. '_' . time() . '.'.$imageType;
-        $uploaded = file_put_contents($location. '/' .$imageName, $croppedImage);
+
+        // $uploaded = file_put_contents($location. '/' .$imageName, $croppedImage);
         if ( $uploaded ) {
             $result['content'] = $location. '/' .$imageName;
         } else {
             $result = false;
-            $result['content'] = "Failed to upload";
+            $result['content'] = $cropped_image;
         }
 
         return $result;

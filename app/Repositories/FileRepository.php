@@ -106,7 +106,7 @@ class FileRepository implements FileRepositoryInterface
         /*if ( $uploaded ) {
             $result['content'] = $location. '/' .$imageName;
         } else {*/
-            $result['status'] = false;
+            $result['status'] = true;
             $result['content'] = $cropped_image;
         //}
 

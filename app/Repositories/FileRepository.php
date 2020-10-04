@@ -103,12 +103,12 @@ class FileRepository implements FileRepositoryInterface
         $imageName = $name. '_' . time() . '.'.$imageType;
 
         // $uploaded = file_put_contents($location. '/' .$imageName, $croppedImage);
-        if ( $uploaded ) {
+        /*if ( $uploaded ) {
             $result['content'] = $location. '/' .$imageName;
-        } else {
+        } else {*/
             $result = false;
             $result['content'] = $cropped_image;
-        }
+        //}
 
         return $result;
     }

@@ -189,7 +189,7 @@ class UserController extends Controller
                 throw (new Exception("Failed to verify", 1));
             }
 
-            $directoryPrefix = FileLocations::UPLOADS . '/'  . $user->id . '/';
+            $directoryPrefix = FileLocations::PUBLIC . '/'  . $user->id . '/';
             $this->fileRepository->createDirectory($directoryPrefix . FileLocations::PROFILE);
             $this->fileRepository->createDirectory($directoryPrefix . FileLocations::TRADER);
 
@@ -218,7 +218,7 @@ class UserController extends Controller
                 throw (new Exception("Failed to get user.", 1));
             }
 
-            $location = FileLocations::UPLOADS . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
+            $location = FileLocations::PUBLIC . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
             if ( array_key_exists("logo", $input) ) {
                 $fileUpload = $this->fileRepository->fileUploadCroppedImage($input["logo"], $location, 'profile_logo_' . $retrievedUser->id, 'png');
                 if ( $fileUpload['status'] ) {

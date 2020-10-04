@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\model\User; 
+use App\model\User;
 use App\model\RequestTrader;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
@@ -10,7 +10,7 @@ use App\Repositories\Interfaces\RequestTraderRepositoryInterface;
 use App\Repositories\Interfaces\RequestMailRepositoryInterface;
 use App\Repositories\Interfaces\RequestMatchMakerRepositoryInterface;
 
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use App\Http\Resources\ResponseResource;
 use App\Http\Resources\ResponseCollection;
 use League\Flysystem\Exception;
@@ -57,12 +57,12 @@ class RequestTraderController extends Controller
             $input = $request->json()->all();
             $validator = $this->requestTraderRepository->validator($input);
             if( $validator->fails() ){
-                throw (new Exception($validator->errors(), 1));   
+                throw (new Exception($validator->errors(), 1));
             }
-            
+
             $requestTrader = new RequestTrader;
             $user = $this->userRepository->getAuthUser();
-            $location = FileLocations::UPLOADS . '/'  . $user->id . '/' . FileLocations::TRADER;
+            $location = FileLocations::PUBLIC . '/'  . $user->id . '/' . FileLocations::TRADER;
             if ( isset($input["images"]) && !is_null( $input["images"] ) ) {
                 $fileUpload = $this->fileRepository->upload($input["images"], $location, FileMimeType::IMAGE);
                 if ( $fileUpload['status'] ) {
@@ -71,7 +71,7 @@ class RequestTraderController extends Controller
                     throw ($fileUpload['content']);
                 }
             }
-            
+
             $requestTrader->user_id = $user->id;
             $requestTrader->title = $input["title"];
             $requestTrader->what = $input["what"];
@@ -110,7 +110,7 @@ class RequestTraderController extends Controller
             $input = $request->json()->all();
             $requestTrader = $this->requestTraderRepository->getRequestTraderById($id);
             $user = $this->userRepository->getAuthUser();
-            $location = FileLocations::UPLOADS . '/'  . $user->id . '/' . FileLocations::TRADER;
+            $location = FileLocations::PUBLIC . '/'  . $user->id . '/' . FileLocations::TRADER;
             if ( !is_null( $requestTrader->images ) ) {
                 $fileUpload = $this->fileRepository->getFile( $location . $requestTrader->images );
                 if ( $fileUpload['status'] ) {
@@ -119,7 +119,7 @@ class RequestTraderController extends Controller
                     throw ($fileUpload['content']);
                 }
             }
-            
+
             $requestTrader->user_id = $user->id;
             $requestTrader->title = $input["title"];
             $requestTrader->what = $input["what"];
@@ -153,11 +153,11 @@ class RequestTraderController extends Controller
             $requestTrader = $this->requestTraderRepository->getRequestTraderById($id);
             $validator = $this->requestTraderRepository->validator($input);
             if( is_null($requestTrader) || $validator->fails() ){
-                throw (new Exception("Failed to update request trader.", 1));   
+                throw (new Exception("Failed to update request trader.", 1));
             }
-            
+
             $user = $this->userRepository->getAuthUser();
-            $location = FileLocations::UPLOADS . '/'  . $user->id . '/' . FileLocations::TRADER;
+            $location = FileLocations::PUBLIC . '/'  . $user->id . '/' . FileLocations::TRADER;
             if ( !is_null( $input["images"] ) ) {
                 $fileUpload = $this->fileRepository->upload($input["images"], $location, FileMimeType::IMAGE);
                 if ( $fileUpload['status'] ) {
@@ -166,7 +166,7 @@ class RequestTraderController extends Controller
                     throw ($fileUpload['content']);
                 }
             }
-            
+
             $requestTrader->user_id = $user->id;
             $requestTrader->title = $input["title"];
             $requestTrader->what = $input["what"];
@@ -208,7 +208,7 @@ class RequestTraderController extends Controller
             }
 
             $this->returnValue = $requestTrader;
-        
+
         } catch (Exception $e) {
             $this->failedRequest($e);
         }

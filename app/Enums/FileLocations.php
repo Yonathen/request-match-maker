@@ -13,6 +13,7 @@ use Rexlabs\Enum\Enum;
 class FileLocations extends Enum
 {
     const UPLOADS = 'Uploads';
+    const PUBLIC = 'public';
     const TRADER = 'trader';
     const PROFILE = 'profile';
 }

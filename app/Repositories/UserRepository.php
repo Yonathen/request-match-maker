@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Validator;
 use App\model\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;

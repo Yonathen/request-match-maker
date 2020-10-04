@@ -100,10 +100,10 @@ class FileRepository implements FileRepositoryInterface
         list($type, $croppedImage) = explode(';', $croppedImage);
         list(, $croppedImage) = explode(',', $croppedImage);
         $croppedImage = base64_decode($croppedImage);
-        $imageName = $name. '_' . time() . '.'.$imageType;
-        $uploaded = Storage::disk('local')->put($location. '/' .$imageName, $croppedImage);
+        $imageName = $location. '/' .$name. '_' . time() . '.'.$imageType;
+        $uploaded = Storage::disk('local')->put($imageName, $croppedImage);
         if ( $uploaded ) {
-            $result['content'] = $location. '/' .$imageName;
+            $result['content'] = Storage::url($imageName);
         } else {
             $result = false;
             $result['content'] = "Failed to upload";

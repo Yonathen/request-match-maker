@@ -235,6 +235,7 @@ class UserController extends Controller
             $retrievedUser->gender = $input["gender"];
             $retrievedUser->established_on = $input["establishedOn"];
             $retrievedUser->established_by = $input["establishedBy"];
+            $retrievedUser->website = $input["website"];
 
             if ( !$this->userRepository->saveUser($retrievedUser) ) {
                 throw (new Exception("Failed to update user.", 1));

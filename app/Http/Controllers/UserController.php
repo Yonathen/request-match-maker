@@ -215,8 +215,10 @@ class UserController extends Controller
 
             $retrievedUser = $this->userRepository->getAuthUser();
             $validator = $this->userRepository->validator($input);
-            if( is_null($retrievedUser) || $validator->fails() ){
+            if( is_null($retrievedUser) ){
                 throw (new Exception("Failed to get user.", 1));
+            } elseif ($validator->fails()) {
+                throw (new Exception("Validation failed", 1));
             }
 
             $location = FileLocations::UPLOADS . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;

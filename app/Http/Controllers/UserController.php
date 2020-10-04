@@ -222,7 +222,7 @@ class UserController extends Controller
             if ( array_key_exists("logo", $input) ) {
                 $fileUpload = $this->fileRepository->fileUploadCroppedImage($input["logo"], $location, 'profile_logo_' . $retrievedUser->id, 'png');
                 if ( $fileUpload['status'] ) {
-                    $retrievedUser->logo = $fileUpload["content"];
+                    // $retrievedUser->logo = $fileUpload["content"];
                 } else {
                     throw ($fileUpload['content']);
                 }
@@ -239,7 +239,7 @@ class UserController extends Controller
             if ( !$this->userRepository->saveUser($retrievedUser) ) {
                 throw (new Exception("Failed to update user.", 1));
             }
-            $this->returnValue = $retrievedUser;
+            $this->returnValue = $fileUpload["content"];
 
         } catch (Exception $e) {
             $this->failedRequest($e);

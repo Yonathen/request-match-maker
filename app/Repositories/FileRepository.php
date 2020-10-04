@@ -94,7 +94,7 @@ class FileRepository implements FileRepositoryInterface
 
     }
 
-    fileUploadCroppedImage($croppedImage, $location, $name, $type) {
+    public function fileUploadCroppedImage($croppedImage, $location, $name, $type) {
         list($type, $cropped_image) = explode(';', $croppedImage);
         list(, $cropped_image) = explode(',', $croppedImage);
         $croppedImage = base64_decode($croppedImage);

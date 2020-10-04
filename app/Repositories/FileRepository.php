@@ -1,8 +1,8 @@
-<?php 
+<?php
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Carbon\Carbon;
@@ -16,7 +16,7 @@ use App\Enums\FileMimeType;
 
 use App\Repositories\Interfaces\FileRepositoryInterface;
 
-class FileRepository implements FileRepositoryInterface 
+class FileRepository implements FileRepositoryInterface
 {
 
 	/**
@@ -61,7 +61,7 @@ class FileRepository implements FileRepositoryInterface
 
 		return $result;
 	}
-	
+
 
 	/**
 	 * @param array|string $fileNameorNames
@@ -69,7 +69,7 @@ class FileRepository implements FileRepositoryInterface
 	public function deleteFileOrFiles ( $fileNameorNames ) {
 		return Storage::delete($fileNameorNames);
 	}
-	
+
 	public function upload( $files, $location, $fileType = FileMimeType::ALL, $operationType = FileOperationType::SINGLE) {
 		$result = [ 'status' => true, 'content' => null ];
 		if ( $operationType === FileOperationType::SINGLE) {
@@ -91,10 +91,18 @@ class FileRepository implements FileRepositoryInterface
 			}
 		}
 		return $result;
-		
-	}
 
-	/** 
+    }
+
+    fileUploadCroppedImage($croppedImage, $location, $name, $type) {
+        list($type, $cropped_image) = explode(';', $croppedImage);
+        list(, $cropped_image) = explode(',', $croppedImage);
+        $croppedImage = base64_decode($croppedImage);
+        $imageName = date($name).'.'.$type;
+        file_put_contents($location. '/' .$imageName, $croppedImage);
+    }
+
+	/**
 	 * @param  array  $data
 	 * @param  string  $type
      */
@@ -114,9 +122,9 @@ class FileRepository implements FileRepositoryInterface
 		try {
 			$validator = $this->validator($file, $type);
 			if ( $validator->fails() ) {
-                throw (new Exception($validator->errors(), 1));   
+                throw (new Exception($validator->errors(), 1));
 			}
-			
+
 			$result['content'] = Storage::putFile($location, $file);
 			if ( !$result['content'] ) {
 				throw (new Exception("Failed to upload", 1));
@@ -127,5 +135,5 @@ class FileRepository implements FileRepositoryInterface
 		}
 		return $result;
 	}
-	
+
 }

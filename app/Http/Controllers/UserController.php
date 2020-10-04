@@ -221,7 +221,7 @@ class UserController extends Controller
 
             $location = FileLocations::UPLOADS . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
             if ( !is_null( $input["logo"] ) ) {
-                $fileUpload = $this->fileRepository->upload($input["logo"], $location, FileMimeType::IMAGE);
+                $fileUpload = $this->fileRepository->fileUploadCroppedImage($input["logo"], $location, 'profile_logo_' . $retrievedUser.id, 'png');
                 if ( $fileUpload['status'] ) {
                     $retrievedUser->logo = $fileUpload["content"][0];
                 } else {

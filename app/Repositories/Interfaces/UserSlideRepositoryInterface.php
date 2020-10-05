@@ -15,7 +15,6 @@ interface UserSlideRepositoryInterface
 
 	/**
     * @param User $user
-	* @param string $id
     * @param BaseUserSlide $userSlide
 	*/
 	public function updateUserSlide(User $user, string $id, BaseUserSlide $userSlide);

@@ -11,6 +11,7 @@ use App\Http\Resources\ResponseCollection;
 use League\Flysystem\Exception;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\UserSlideRepositoryInterface;
 use App\Repositories\Interfaces\PartnerRepositoryInterface;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
 use App\Repositories\Interfaces\FileRepositoryInterface;
@@ -22,8 +23,10 @@ use App\Repositories\Interfaces\RequestMatchMakerRepositoryInterface;
 use App\Enums\ReturnType;
 use App\Enums\FileLocations;
 use App\Enums\RequestStatus;
+use App\Enums\OperationType;
 
 use App\Utility\R;
+use App\Utility\BaseUserSlide;
 
 class UserController extends Controller
 {
@@ -31,6 +34,7 @@ class UserController extends Controller
 
     private $fileRepository;
     private $userRepository;
+    private $userSlideRepository;
     private $requestTraderRepository;
     private $requestOfferRepository;
     private $requestMailRepository;
@@ -42,6 +46,7 @@ class UserController extends Controller
 
     public function __construct(
         UserRepositoryInterface $userRepository,
+        UserSlideRepositoryInterface $userSlideRepository,
         RequestTraderRepositoryInterface $requestTraderRepository,
         RequestOfferRepositoryInterface $requestOfferRepository,
         RequestMailRepositoryInterface $requestMailRepository,
@@ -51,6 +56,7 @@ class UserController extends Controller
         FileRepositoryInterface $fileRepository)
     {
         $this->userRepository = $userRepository;
+        $this->userSlideRepository = $userSlideRepository;
         $this->partnerRepository = $partnerRepository;
         $this->notificationRepository = $notificationRepository;
         $this->fileRepository = $fileRepository;
@@ -246,6 +252,69 @@ class UserController extends Controller
         }
 
         return $this->getResponse();
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfileSlide(Request $request)
+    {
+        $this->type = 'updateProfile';
+        $this->returnType = ReturnType::SINGLE;
+        try {
+            $input = $request->json()->all();
+
+            $retrievedUser = $this->userRepository->getAuthUser();
+            if( is_null($retrievedUser) ){
+                throw (new Exception("Failed to get user.", 1));
+            }
+
+            if ( array_key_exists("image", $input) ) {
+                $uploadResult = $this->uploadNewSlide($input["image"]);
+                if ($uploadResult["status"]) {
+                    $input["image"] = $uploadResult["content"];
+                } else {
+                    throw (new Exception("Failed to upload image.", 1));
+                }
+            } else if ($input["action"] === OperationType.ADD) {
+                throw (new Exception("Image is mandatory for adding slides.", 1));
+            }
+
+            switch ( $input["action"] ) {
+                case OperationType.ADD:
+                    $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"]);
+                    if ( !$this->userSlideRepository->addUserSlide($retrievedUser, $userSlide) ) {
+                        throw (new Exception("Failed to update slide.", 1));
+                    }
+                break;
+                case OperationType.UPDATE:
+                    $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"]);
+                    $userSlide->id = $input["id"];
+                    if ( !$this->userSlideRepository->updateUserSlide($retrievedUser, $userSlide) ) {
+                        throw (new Exception("Failed to update slide.", 1));
+                    }
+                break;
+                case OperationType.REMOVE:
+                    if ( !$this->userSlideRepository->removeUserSlide($retrievedUser, $input["id"]) ) {
+                        throw (new Exception("Failed to remove slide.", 1));
+                    }
+                break;
+            }
+
+            $this->returnValue = $retrievedUser;
+
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
+    }
+
+    public function uploadNewSlide($image) {
+        $location = FileLocations::PUBLIC . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
+        $fileUpload = $this->fileRepository->fileUploadCroppedImage($image, $location, 'profile_slide_' . $retrievedUser->id, 'png');
+        return $fileUpload;
     }
 
     public function removeMyAccount(Request $request) {

@@ -23,6 +23,7 @@ Route::prefix('v1')->group(function(){
 		Route::get('profile', 'UserController@profile');
         Route::get('profile/{id}', 'UserController@profileById');
         Route::post('profile/update/detail', 'UserController@updateProfileDetail');
+        Route::post('profile/update/slide', 'UserController@updateProfileSlide');
 
 		Route::get('user/partners', 'UserController@getPartnerData');
 

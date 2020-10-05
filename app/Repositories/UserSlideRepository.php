@@ -2,7 +2,7 @@
 namespace App\Repositories;
 
 use App\model\User;
-use App\Utility\BaseBaseUserSlide;
+use App\Utility\BaseUserSlide;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Repositories\Interfaces\UserSlideRepositoryInterface;

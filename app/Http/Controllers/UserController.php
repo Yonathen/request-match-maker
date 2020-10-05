@@ -260,7 +260,7 @@ class UserController extends Controller
      */
     public function updateProfileSlide(Request $request)
     {
-        $this->type = 'updateProfile';
+        $this->type = 'updateProfileSlide';
         $this->returnType = ReturnType::SINGLE;
         try {
             $input = $request->json()->all();
@@ -271,7 +271,7 @@ class UserController extends Controller
             }
 
             if ( array_key_exists("image", $input) ) {
-                $uploadResult = $this->uploadNewSlide($input["image"]);
+                $uploadResult = $this->uploadNewSlide($input["image"], $retrievedUser->id);
                 if ($uploadResult["status"]) {
                     $input["image"] = $uploadResult["content"];
                 } else {
@@ -311,9 +311,9 @@ class UserController extends Controller
         return $this->getResponse();
     }
 
-    public function uploadNewSlide($image) {
-        $location = FileLocations::PUBLIC . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
-        $fileUpload = $this->fileRepository->fileUploadCroppedImage($image, $location, 'profile_slide_' . $retrievedUser->id, 'png');
+    public function uploadNewSlide($image, $id) {
+        $location = FileLocations::PUBLIC . '/'  . $id . '/' . FileLocations::PROFILE;
+        $fileUpload = $this->fileRepository->fileUploadCroppedImage($image, $location, 'profile_slide_' . $id, 'png');
         return $fileUpload;
     }
 

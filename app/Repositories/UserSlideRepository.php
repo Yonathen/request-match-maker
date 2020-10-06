@@ -37,7 +37,7 @@ class UserSlideRepository implements UserSlideRepositoryInterface
 		for ( $i = 0; $i < count($userSlides); $i++ ) {
             if ($userSlides[$i]['id'] === $userSlide->id) {
                 if ( $userSlide->image === FileOperationType::Unchanged) {
-                    $userSlide->image = $userSlides[$i]['image']
+                    $userSlide->image = $userSlides[$i]['image'];
                 }
 				$userSlides[$i] = $userSlide;
 			}

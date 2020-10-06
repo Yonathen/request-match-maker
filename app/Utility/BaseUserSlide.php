@@ -26,7 +26,7 @@ class BaseUserSlide
 	/** @var string */
 	public $captionBackgroundColor;
 
-	public function __construct( $title, $image, $content, $titleColor, $contentColor, $captionBackgroundColor, $id) {
+	public function __construct( $title, $image, $content, $titleColor, $contentColor, $captionBackgroundColor, $id = null) {
         $this->title = $title;
         $this->image = $image;
         $this->content = $content;

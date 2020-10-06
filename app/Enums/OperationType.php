@@ -5,7 +5,7 @@ namespace App\Enums;
 use Rexlabs\Enum\Enum;
 
 /**
- * The VisitStatus enum.
+ * The OperationType enum.
  *
  * @method static self ADD()
  * @method static self UPDATE()
@@ -14,8 +14,8 @@ use Rexlabs\Enum\Enum;
  */
 class OperationType extends Enum
 {
-    const ADD = '';
-    const UPDATE = '';
-    const REMOVE = '';
-    const SHOW = '';
+    const ADD = 'ADD';
+    const UPDATE = 'UPDATE';
+    const REMOVE = 'REMOVE';
+    const SHOW = 'SHOW';
 }

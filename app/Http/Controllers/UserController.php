@@ -302,7 +302,7 @@ class UserController extends Controller
                 break;
             }
 
-            $this->returnValue = $retrievedUser;
+            $this->returnValue = $userSlide;
 
         } catch (Exception $e) {
             $this->failedRequest($e);

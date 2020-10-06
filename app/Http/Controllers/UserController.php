@@ -277,7 +277,7 @@ class UserController extends Controller
                 } else {
                     throw (new Exception("Failed to upload image.", 1));
                 }
-            } else if ($input["action"] === OperationType.ADD) {
+            } else if ($input["action"] === OperationType::ADD) {
                 throw (new Exception("Image is mandatory for adding slides.", 1));
             }
 

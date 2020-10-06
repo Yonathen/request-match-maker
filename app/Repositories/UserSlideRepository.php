@@ -34,7 +34,6 @@ class UserSlideRepository implements UserSlideRepositoryInterface
 	{
 		$userSlides = $user->slides;
 		for ( $i = 0; $i < count($userSlides); $i++ ) {
-            print($userSlides[$i]['id']." === ".$userSlide->id);
             if ($userSlides[$i]['id'] === $userSlide->id) {
 				$userSlides[$i] = $userSlide;
 			}

@@ -261,7 +261,7 @@ class UserController extends Controller
     public function updateProfileSlide(Request $request)
     {
         $this->type = 'updateProfileSlide';
-        $this->returnType = ReturnType::COLLECTION;
+        $this->returnType = ReturnType::SINGLE;
         try {
             $input = $request->json()->all();
 
@@ -302,7 +302,7 @@ class UserController extends Controller
                 break;
             }
 
-            $this->returnValue = $userSlide;
+            $this->returnValue = $retrievedUser;
 
         } catch (Exception $e) {
             $this->failedRequest($e);

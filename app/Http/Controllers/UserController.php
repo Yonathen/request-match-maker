@@ -261,7 +261,7 @@ class UserController extends Controller
     public function updateProfileSlide(Request $request)
     {
         $this->type = 'updateProfileSlide';
-        $this->returnType = ReturnType::COLLECTION;
+        $this->returnType = ReturnType::SINGLE;
         try {
             $input = $request->json()->all();
 
@@ -290,6 +290,7 @@ class UserController extends Controller
                 break;
                 case OperationType::UPDATE:
                     $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"]);
+                    print_r($userSlide);
                     $userSlide->id = $input["id"];
                     if ( !$this->userSlideRepository->updateUserSlide($retrievedUser, $userSlide) ) {
                         throw (new Exception("Failed to update slide.", 1));
@@ -302,7 +303,7 @@ class UserController extends Controller
                 break;
             }
 
-            $this->returnValue = $userSlide;
+            $this->returnValue = $retrievedUser;
 
         } catch (Exception $e) {
             $this->failedRequest($e);

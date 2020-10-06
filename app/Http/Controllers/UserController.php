@@ -291,6 +291,8 @@ class UserController extends Controller
                 case OperationType::UPDATE:
                     $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"]);
                     $userSlide->id = $input["id"];
+
+                    print_r($userSlide);
                     if ( !$this->userSlideRepository->updateUserSlide($retrievedUser, $userSlide) ) {
                         throw (new Exception("Failed to update slide.", 1));
                     }

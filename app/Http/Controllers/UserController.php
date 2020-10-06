@@ -24,6 +24,7 @@ use App\Enums\ReturnType;
 use App\Enums\FileLocations;
 use App\Enums\RequestStatus;
 use App\Enums\OperationType;
+use App\Enums\FileOperationType;
 
 use App\Utility\R;
 use App\Utility\BaseUserSlide;
@@ -270,7 +271,7 @@ class UserController extends Controller
                 throw (new Exception("Failed to get user.", 1));
             }
 
-            if ( array_key_exists("image", $input) ) {
+            if ( array_key_exists("image", $input) && $input["image"] !== FileOperationType::Unchanged ) {
                 $uploadResult = $this->uploadNewSlide($input["image"], $retrievedUser->id);
                 if ($uploadResult["status"]) {
                     $input["image"] = $uploadResult["content"];

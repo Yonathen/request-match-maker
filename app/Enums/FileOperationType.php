@@ -9,9 +9,11 @@ use Rexlabs\Enum\Enum;
  *
  * @method static self SINGLE()
  * @method static self Multiple()
+ * @method static self Unchanged()
  */
 class FileOperationType extends Enum
 {
     const SINGLE = 'Single';
     const Multiple = 'Multiple';
+    const Unchanged = 'Unchanged';
 }

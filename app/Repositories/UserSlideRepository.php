@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\model\User;
 use App\Utility\BaseUserSlide;
+use App\Enums\FileOperationType;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Repositories\Interfaces\UserSlideRepositoryInterface;
@@ -35,6 +36,9 @@ class UserSlideRepository implements UserSlideRepositoryInterface
 		$userSlides = $user->slides;
 		for ( $i = 0; $i < count($userSlides); $i++ ) {
             if ($userSlides[$i]['id'] === $userSlide->id) {
+                if ( $userSlide->image === FileOperationType::Unchanged) {
+                    $userSlide->image = $userSlides[$i]['image']
+                }
 				$userSlides[$i] = $userSlide;
 			}
 		}

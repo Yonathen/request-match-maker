@@ -9,7 +9,7 @@ class BaseUserSlide
     public $id;
 
 	/** @var string */
-	public $image;
+    public $image;
 
 	/** @var string */
 	public $title;
@@ -17,11 +17,28 @@ class BaseUserSlide
 	/** @var string */
     public $content;
 
-	public function __construct($title, $image, $content) {
-		$this->id = Str::random(16);
+	/** @var string */
+	public $titleColor;
+
+	/** @var string */
+	public $contentColor;
+
+	/** @var string */
+	public $captionBackgroundColor;
+
+	public function __construct( $title, $image, $content, $titleColor, $contentColor, $captionBackgroundColor, $id) {
         $this->title = $title;
         $this->image = $image;
-		$this->content = $content;
+        $this->content = $content;
+        $this->titleColor = $titleColor;
+        $this->contentColor = $contentColor;
+        $this->captionBackgroundColor = $captionBackgroundColor;
+
+        if ( is_null($id) ) {
+            $this->id = Str::random(16);
+        } else {
+            $this->id = $id;
+        }
 	}
 }
 ?>

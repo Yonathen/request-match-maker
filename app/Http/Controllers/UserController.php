@@ -283,14 +283,15 @@ class UserController extends Controller
 
             switch ( $input["action"] ) {
                 case OperationType::ADD:
-                    $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"]);
+                    $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"], $input["titleColor"],
+                        $input["contentColor"], $input["captionBackgroundColor"]);
                     if ( !$this->userSlideRepository->addUserSlide($retrievedUser, $userSlide) ) {
                         throw (new Exception("Failed to update slide.", 1));
                     }
                 break;
                 case OperationType::UPDATE:
-                    $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"]);
-                    $userSlide->id = $input["id"];
+                    $userSlide = new BaseUserSlide($input["title"], $input["image"], $input["content"], $input["titleColor"],
+                        $input["contentColor"], $input["captionBackgroundColor"], $input["id"]);
                     if ( !$this->userSlideRepository->updateUserSlide($retrievedUser, $userSlide) ) {
                         throw (new Exception("Failed to update slide.", 1));
                     }

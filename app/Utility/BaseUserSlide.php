@@ -1,6 +1,8 @@
 <?php
 namespace App\Utility;
 
+use Illuminate\Support\Str;
+
 class BaseUserSlide
 {
     /** @var int */

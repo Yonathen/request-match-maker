@@ -261,7 +261,7 @@ class UserController extends Controller
     public function updateProfileSlide(Request $request)
     {
         $this->type = 'updateProfileSlide';
-        $this->returnType = ReturnType::SINGLE;
+        $this->returnType = ReturnType::MULTIPLE;
         try {
             $input = $request->json()->all();
 

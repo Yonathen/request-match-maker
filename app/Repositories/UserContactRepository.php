@@ -17,13 +17,13 @@ class UserContactRepository implements UserContactRepositoryInterface
      */
 	public function addUserContact(User $user, BaseUserContact $userContact)
 	{
-		$userContacts = $user->slides;
+		$userContacts = $user->contacts;
 		if (!is_null($userContacts)) {
 			array_push($userContacts, $userContact);
 		} else {
 			$userContacts = [$userContact];
 		}
-		$user->slides = $userContacts;
+		$user->contacts = $userContacts;
 		return $user->save();
 	}
 
@@ -33,7 +33,7 @@ class UserContactRepository implements UserContactRepositoryInterface
 	*/
 	public function updateUserContact(User $user, BaseUserContact $userContact)
 	{
-		$userContacts = $user->slides;
+		$userContacts = $user->contacts;
 		for ( $i = 0; $i < count($userContacts); $i++ ) {
             if ($userContacts[$i]['id'] === $userContact->id) {
                 if ( $userContact->personPhoto === FileOperationType::Unchanged) {
@@ -42,7 +42,7 @@ class UserContactRepository implements UserContactRepositoryInterface
 				$userContacts[$i] = $userContact;
 			}
 		}
-		$user->slides = $userContacts;
+		$user->contacts = $userContacts;
 		return $user->save();
 	}
 
@@ -52,13 +52,13 @@ class UserContactRepository implements UserContactRepositoryInterface
 	*/
 	public function removeUserContact(User $user, string $id)
 	{
-		$userContacts = $user->slides;
+		$userContacts = $user->contacts;
 		for ( $i = 0; $i < count($userContacts); $i++ ) {
 			if ($userContacts[$i]['id'] === $id) {
 				unset($userContacts[$i]);
 			}
 		}
-		$user->slides = $userContacts;
+		$user->contacts = $userContacts;
 		return $user->save();
 	}
 

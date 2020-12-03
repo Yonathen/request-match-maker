@@ -29,6 +29,7 @@ use App\Enums\FileOperationType;
 
 use App\Utility\R;
 use App\Utility\BaseUserSlide;
+use App\Utility\BaseUserContact;
 
 class UserController extends Controller
 {

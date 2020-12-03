@@ -12,6 +12,7 @@ use League\Flysystem\Exception;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\UserSlideRepositoryInterface;
+use App\Repositories\Interfaces\UserContactRepositoryInterface;
 use App\Repositories\Interfaces\PartnerRepositoryInterface;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
 use App\Repositories\Interfaces\FileRepositoryInterface;
@@ -36,6 +37,7 @@ class UserController extends Controller
     private $fileRepository;
     private $userRepository;
     private $userSlideRepository;
+    private $userContactRepository;
     private $requestTraderRepository;
     private $requestOfferRepository;
     private $requestMailRepository;
@@ -48,6 +50,7 @@ class UserController extends Controller
     public function __construct(
         UserRepositoryInterface $userRepository,
         UserSlideRepositoryInterface $userSlideRepository,
+        UserContactRepositoryInterface $userContactRepository,
         RequestTraderRepositoryInterface $requestTraderRepository,
         RequestOfferRepositoryInterface $requestOfferRepository,
         RequestMailRepositoryInterface $requestMailRepository,
@@ -58,6 +61,7 @@ class UserController extends Controller
     {
         $this->userRepository = $userRepository;
         $this->userSlideRepository = $userSlideRepository;
+        $this->userContactRepository = $userContactRepository;
         $this->partnerRepository = $partnerRepository;
         $this->notificationRepository = $notificationRepository;
         $this->fileRepository = $fileRepository;
@@ -317,6 +321,61 @@ class UserController extends Controller
         $location = FileLocations::PUBLIC . '/'  . $id . '/' . FileLocations::PROFILE;
         $fileUpload = $this->fileRepository->fileUploadCroppedImage($image, $location, 'profile_slide_' . $id, 'png');
         return $fileUpload;
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfileContact(Request $request)
+    {
+        $this->type = 'updateProfileContact';
+        $this->returnType = ReturnType::SINGLE;
+        try {
+            $input = $request->json()->all();
+
+            $retrievedUser = $this->userRepository->getAuthUser();
+            if( is_null($retrievedUser) ){
+                throw (new Exception("Failed to get user.", 1));
+            }
+
+            if ( array_key_exists("personPhoto", $input) && $input["personPhoto"] !== FileOperationType::Unchanged ) {
+                $location = FileLocations::PUBLIC . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
+                $uploadResult = $this->fileRepository->fileUploadCroppedImage($input["personPhoto"], $location, 'profile_contact_' . $id, 'png');
+                if ($uploadResult["status"]) {
+                    $input["personPhoto"] = $uploadResult["content"];
+                } else {
+                    throw (new Exception("Failed to upload photo.", 1));
+                }
+            }
+
+            switch ( $input["action"] ) {
+                case OperationType::ADD:
+                    $userContact = new BaseUserContact($input["personName"], $input["personPhoto"], new Address($input));
+                    if ( !$this->userContactRepository->addUserContact($retrievedUser, $userContact) ) {
+                        throw (new Exception("Failed to add contact.", 1));
+                    }
+                break;
+                case OperationType::UPDATE:
+                    $userContact = new BaseUserContact($input["personName"], $input["personPhoto"], new Address($input));
+                    if ( !$this->userContactRepository->updateUserContact($retrievedUser, $userContact) ) {
+                        throw (new Exception("Failed to update contact.", 1));
+                    }
+                break;
+                case OperationType::REMOVE:
+                    if ( !$this->userContactRepository->removeUserContact($retrievedUser, $input["id"]) ) {
+                        throw (new Exception("Failed to remove contact.", 1));
+                    }
+                break;
+            }
+
+            $this->returnValue = $retrievedUser;
+
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
     }
 
     public function removeMyAccount(Request $request) {

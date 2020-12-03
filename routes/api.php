@@ -24,6 +24,7 @@ Route::prefix('v1')->group(function(){
         Route::get('profile/{id}', 'UserController@profileById');
         Route::post('profile/update/detail', 'UserController@updateProfileDetail');
         Route::post('profile/update/slide', 'UserController@updateProfileSlide');
+        Route::post('profile/update/contact', 'UserController@updateProfileContact');
 
 		Route::get('user/partners', 'UserController@getPartnerData');
 

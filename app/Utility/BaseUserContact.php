@@ -3,7 +3,7 @@ namespace App\Utility;
 
 use Illuminate\Support\Str;
 
-class BaseUserSlide
+class BaseUserContact
 {
     /** @var int */
     public $id;

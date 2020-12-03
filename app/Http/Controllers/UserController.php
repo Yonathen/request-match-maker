@@ -341,7 +341,7 @@ class UserController extends Controller
 
             if ( array_key_exists("personPhoto", $input) && $input["personPhoto"] !== FileOperationType::Unchanged ) {
                 $location = FileLocations::PUBLIC . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
-                $uploadResult = $this->fileRepository->fileUploadCroppedImage($input["personPhoto"], $location, 'profile_contact_' . $id, 'png');
+                $uploadResult = $this->fileRepository->fileUploadCroppedImage($input["personPhoto"], $location, 'profile_contact_' . $retrievedUser->id, 'png');
                 if ($uploadResult["status"]) {
                     $input["personPhoto"] = $uploadResult["content"];
                 } else {

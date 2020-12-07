@@ -34,7 +34,7 @@ class Address
 	public $country;
 
 	/** @var string */
-    public $lon;
+    public $lng;
 
 	/** @var string */
 	public $lat;
@@ -52,7 +52,7 @@ class Address
 		$this->postalCode = $address["postalCode"];
 		$this->city = $address["city"];
 		$this->country = $address["country"];
-		$this->lon = $address["lon"];
+		$this->lng = $address["lng"];
 		$this->lat = $address["lat"];
 		/*if ( !is_null ( $address["default"] ) ) {
 			$this->default = $address["default"];

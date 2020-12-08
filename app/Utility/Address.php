@@ -30,7 +30,7 @@ class Address
 	/** @var string */
 	public $city;
 
-	/** @var string */
+	/** @var array */
 	public $country;
 
 	/** @var string */

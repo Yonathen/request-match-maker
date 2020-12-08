@@ -35,6 +35,7 @@ class UserContactRepository implements UserContactRepositoryInterface
 	{
 		$userContacts = $user->contacts;
 		for ( $i = 0; $i < count($userContacts); $i++ ) {
+			echo $userContacts[$i]['id'].' === '.$userContact->id;
             if ($userContacts[$i]['id'] === $userContact->id) {
                 if ( $userContact->personPhoto === FileOperationType::Unchanged) {
                     $userContact->personPhoto = $userContacts[$i]['personPhoto'];

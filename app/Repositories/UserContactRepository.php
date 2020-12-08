@@ -56,6 +56,7 @@ class UserContactRepository implements UserContactRepositoryInterface
 		for ( $i = 0; $i < count($userContacts); $i++ ) {
 			if ($userContacts[$i]['id'] === $id) {
 				unset($userContacts[$i]);
+				break;
 			}
 		}
 		$user->contacts = $userContacts;

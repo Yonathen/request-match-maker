@@ -361,7 +361,7 @@ class UserController extends Controller
                     }
                 break;
                 case OperationType::UPDATE:
-                    $userContact = new BaseUserContact($input["personName"], $input["personPhoto"], new Address($input));
+                    $userContact = new BaseUserContact($input["personName"], $input["personPhoto"], new Address($input), $input["id"]);
                     if ( !$this->userContactRepository->updateUserContact($retrievedUser, $userContact) ) {
                         throw (new Exception("Failed to update contact.", 1));
                     }

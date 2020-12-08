@@ -341,7 +341,7 @@ class UserController extends Controller
                 throw (new Exception("Failed to get user.", 1));
             }
 
-            if ( array_key_exists("personPhoto", $input) ) {
+            if ( array_key_exists("personPhoto", $input) && $input["action"] !== OperationType::REMOVE) {
                 $location = FileLocations::PUBLIC . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
                 $uploadResult = $this->fileRepository->fileUploadCroppedImage($input["personPhoto"], $location, 'profile_contact_' . $retrievedUser->id, 'png');
                 if ($uploadResult["status"]) {

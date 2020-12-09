@@ -53,9 +53,8 @@ class UserContactRepository implements UserContactRepositoryInterface
 	public function removeUserContact(User $user, string $id)
 	{
 		$userContacts = $user->contacts;
-		print_r($userContacts);
 		for ( $i = 0; $i < count($userContacts); $i++ ) {
-			print($userContacts[$i]);
+			print_r($userContacts[$i]);
 			if ($userContacts[$i]['id'] === $id) {
 				unset($userContacts[$i]);
 				break;

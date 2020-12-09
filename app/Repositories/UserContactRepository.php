@@ -34,12 +34,12 @@ class UserContactRepository implements UserContactRepositoryInterface
 	public function updateUserContact(User $user, BaseUserContact $userContact)
 	{
 		$userContacts = $user->contacts;
-		for ( $i = 0; $i < count($userContacts); $i++ ) {
-            if ($userContacts[$i]['id'] === $userContact->id) {
+		foreach ( $userContacts as $key => $value) {
+            if ($value['id'] === $userContact->id) {
                 if ( $userContact->personPhoto === FileOperationType::Unchanged) {
-                    $userContact->personPhoto = $userContacts[$i]['personPhoto'];
+                    $userContact->personPhoto = $userContacts[$key]['personPhoto'];
                 }
-				$userContacts[$i] = $userContact;
+				$userContacts[$key] = $userContact;
 			}
 		}
 		$user->contacts = $userContacts;
@@ -53,12 +53,9 @@ class UserContactRepository implements UserContactRepositoryInterface
 	public function removeUserContact(User $user, string $id)
 	{
 		$userContacts = $user->contacts;
-		print_r($userContacts);
-		print_r($userContacts[0]);
-		for ( $i = 0; $i < count($userContacts); $i++ ) {
-			
-			if ($userContacts[$i]['id'] === $id) {
-				unset($userContacts[$i]);
+		foreach ( $userContacts as $key => $value) {
+			if ($value['id'] === $id) {
+				unset($userContacts[$key]);
 				break;
 			}
 		}

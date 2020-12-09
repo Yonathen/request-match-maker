@@ -341,7 +341,7 @@ class UserController extends Controller
                 throw (new Exception("Failed to get user.", 1));
             }
 
-            if ( array_key_exists("personPhoto", $input) && $input["action"] !== OperationType::REMOVE) {
+            if ( array_key_exists("personPhoto", $input) && $input["personPhoto"] !== FileOperationType::Unchanged && $input["action"] !== OperationType::REMOVE) {
                 $location = FileLocations::PUBLIC . '/'  . $retrievedUser->id . '/' . FileLocations::PROFILE;
                 $uploadResult = $this->fileRepository->fileUploadCroppedImage($input["personPhoto"], $location, 'profile_contact_' . $retrievedUser->id, 'png');
                 if ($uploadResult["status"]) {
@@ -349,8 +349,6 @@ class UserController extends Controller
                 } else {
                     throw (new Exception("Failed to upload photo.", 1));
                 }
-            } else {
-                $input["personPhoto"] = '';
             }
 
             switch ( $input["action"] ) {

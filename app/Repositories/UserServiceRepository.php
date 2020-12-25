@@ -17,13 +17,13 @@ class UserServiceRepository implements UserServiceRepositoryInterface
      */
 	public function addUserService(User $user, BaseUserService $userService)
 	{
-		$userServices = $user->Services;
+		$userServices = $user->service;
 		if (!is_null($userServices)) {
 			array_push($userServices, $userService);
 		} else {
 			$userServices = [$userService];
 		}
-		$user->Services = $userServices;
+		$user->service = $userServices;
 		return $user->save();
 	}
 
@@ -33,13 +33,13 @@ class UserServiceRepository implements UserServiceRepositoryInterface
 	*/
 	public function updateUserService(User $user, BaseUserService $userService)
 	{
-		$userServices = $user->Services;
+		$userServices = $user->service;
 		foreach ( $userServices as $key => $value) {
             if ($value['id'] === $userService->id) {
 				$userServices[$key] = $userService;
 			}
 		}
-		$user->Services = $userServices;
+		$user->service = $userServices;
 		return $user->save();
 	}
 
@@ -49,14 +49,14 @@ class UserServiceRepository implements UserServiceRepositoryInterface
 	*/
 	public function removeUserService(User $user, string $id)
 	{
-		$userServices = $user->Services;
+		$userServices = $user->service;
 		foreach ( $userServices as $key => $value) {
 			if ($value['id'] === $id) {
 				unset($userServices[$key]);
 				break;
 			}
 		}
-		$user->Services = $userServices;
+		$user->service = $userServices;
 		return $user->save();
 	}
 

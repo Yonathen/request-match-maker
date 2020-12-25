@@ -13,6 +13,7 @@ use League\Flysystem\Exception;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\UserSlideRepositoryInterface;
 use App\Repositories\Interfaces\UserContactRepositoryInterface;
+use App\Repositories\Interfaces\UserServiceRepositoryInterface;
 use App\Repositories\Interfaces\PartnerRepositoryInterface;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
 use App\Repositories\Interfaces\FileRepositoryInterface;
@@ -31,6 +32,7 @@ use App\Utility\R;
 use App\Utility\Address;
 use App\Utility\BaseUserSlide;
 use App\Utility\BaseUserContact;
+use App\Utility\BaseUserService;
 
 class UserController extends Controller
 {
@@ -40,6 +42,7 @@ class UserController extends Controller
     private $userRepository;
     private $userSlideRepository;
     private $userContactRepository;
+    private $userServiceRepository;
     private $requestTraderRepository;
     private $requestOfferRepository;
     private $requestMailRepository;
@@ -53,6 +56,7 @@ class UserController extends Controller
         UserRepositoryInterface $userRepository,
         UserSlideRepositoryInterface $userSlideRepository,
         UserContactRepositoryInterface $userContactRepository,
+        UserServiceRepositoryInterface $userServiceRepository,
         RequestTraderRepositoryInterface $requestTraderRepository,
         RequestOfferRepositoryInterface $requestOfferRepository,
         RequestMailRepositoryInterface $requestMailRepository,
@@ -64,6 +68,7 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
         $this->userSlideRepository = $userSlideRepository;
         $this->userContactRepository = $userContactRepository;
+        $this->userServiceRepository = $userServiceRepository;
         $this->partnerRepository = $partnerRepository;
         $this->notificationRepository = $notificationRepository;
         $this->fileRepository = $fileRepository;
@@ -367,6 +372,51 @@ class UserController extends Controller
                 case OperationType::REMOVE:
                     if ( !$this->userContactRepository->removeUserContact($retrievedUser, $input["id"]) ) {
                         throw (new Exception("Failed to remove contact.", 1));
+                    }
+                break;
+            }
+
+            $this->returnValue = $retrievedUser;
+
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfileService(Request $request)
+    {
+        $this->type = 'updateProfileService';
+        $this->returnType = ReturnType::SINGLE;
+        try {
+            $input = $request->json()->all();
+
+            $retrievedUser = $this->userRepository->getAuthUser();
+            if( is_null($retrievedUser) ){
+                throw (new Exception("Failed to get user.", 1));
+            }
+
+            switch ( $input["action"] ) {
+                case OperationType::ADD:
+                    $userService = new BaseUserService($input["name"], $input["description"]);
+                    if ( !$this->userServiceRepository->addUserService($retrievedUser, $userService) ) {
+                        throw (new Exception("Failed to add Service.", 1));
+                    }
+                break;
+                case OperationType::UPDATE:
+                    $userService = new BaseUserService($input["name"], $input["description"], $input["id"]);
+                    if ( !$this->userServiceRepository->updateUserService($retrievedUser, $userService) ) {
+                        throw (new Exception("Failed to update Service.", 1));
+                    }
+                break;
+                case OperationType::REMOVE:
+                    if ( !$this->userServiceRepository->removeUserService($retrievedUser, $input["id"]) ) {
+                        throw (new Exception("Failed to remove Service.", 1));
                     }
                 break;
             }

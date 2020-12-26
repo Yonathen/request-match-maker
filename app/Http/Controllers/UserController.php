@@ -13,6 +13,7 @@ use League\Flysystem\Exception;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\UserSlideRepositoryInterface;
 use App\Repositories\Interfaces\UserContactRepositoryInterface;
+use App\Repositories\Interfaces\UserInterviewRepositoryInterface;
 use App\Repositories\Interfaces\UserServiceRepositoryInterface;
 use App\Repositories\Interfaces\PartnerRepositoryInterface;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
@@ -32,6 +33,7 @@ use App\Utility\R;
 use App\Utility\Address;
 use App\Utility\BaseUserSlide;
 use App\Utility\BaseUserContact;
+use App\Utility\BaseUserInterview;
 use App\Utility\BaseUserService;
 
 class UserController extends Controller
@@ -42,6 +44,7 @@ class UserController extends Controller
     private $userRepository;
     private $userSlideRepository;
     private $userContactRepository;
+    private $userInterviewRepository;
     private $userServiceRepository;
     private $requestTraderRepository;
     private $requestOfferRepository;
@@ -56,6 +59,7 @@ class UserController extends Controller
         UserRepositoryInterface $userRepository,
         UserSlideRepositoryInterface $userSlideRepository,
         UserContactRepositoryInterface $userContactRepository,
+        UserInterviewRepositoryInterface $userInterviewRepository,
         UserServiceRepositoryInterface $userServiceRepository,
         RequestTraderRepositoryInterface $requestTraderRepository,
         RequestOfferRepositoryInterface $requestOfferRepository,
@@ -68,6 +72,7 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
         $this->userSlideRepository = $userSlideRepository;
         $this->userContactRepository = $userContactRepository;
+        $this->userInterviewRepository = $userInterviewRepository;
         $this->userServiceRepository = $userServiceRepository;
         $this->partnerRepository = $partnerRepository;
         $this->notificationRepository = $notificationRepository;
@@ -417,6 +422,51 @@ class UserController extends Controller
                 case OperationType::REMOVE:
                     if ( !$this->userServiceRepository->removeUserService($retrievedUser, $input["id"]) ) {
                         throw (new Exception("Failed to remove Service.", 1));
+                    }
+                break;
+            }
+
+            $this->returnValue = $retrievedUser;
+
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateProfileInterview(Request $request)
+    {
+        $this->type = 'updateProfileInterview';
+        $this->returnType = ReturnType::SINGLE;
+        try {
+            $input = $request->json()->all();
+
+            $retrievedUser = $this->userRepository->getAuthUser();
+            if( is_null($retrievedUser) ){
+                throw (new Exception("Failed to get user.", 1));
+            }
+
+            switch ( $input["action"] ) {
+                case OperationType::ADD:
+                    $userInterview = new BaseUserInterview($input["name"], $input["description"]);
+                    if ( !$this->userInterviewRepository->addUserInterview($retrievedUser, $userInterview) ) {
+                        throw (new Exception("Failed to add Interview.", 1));
+                    }
+                break;
+                case OperationType::UPDATE:
+                    $userInterview = new BaseUserInterview($input["name"], $input["description"], $input["id"]);
+                    if ( !$this->userInterviewRepository->updateUserInterview($retrievedUser, $userInterview) ) {
+                        throw (new Exception("Failed to update Interview.", 1));
+                    }
+                break;
+                case OperationType::REMOVE:
+                    if ( !$this->userInterviewRepository->removeUserInterview($retrievedUser, $input["id"]) ) {
+                        throw (new Exception("Failed to remove Interview.", 1));
                     }
                 break;
             }

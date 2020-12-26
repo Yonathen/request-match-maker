@@ -453,13 +453,13 @@ class UserController extends Controller
 
             switch ( $input["action"] ) {
                 case OperationType::ADD:
-                    $userInterview = new BaseUserInterview($input["name"], $input["description"]);
+                    $userInterview = new BaseUserInterview($input["question"], $input["answer"]);
                     if ( !$this->userInterviewRepository->addUserInterview($retrievedUser, $userInterview) ) {
                         throw (new Exception("Failed to add Interview.", 1));
                     }
                 break;
                 case OperationType::UPDATE:
-                    $userInterview = new BaseUserInterview($input["name"], $input["description"], $input["id"]);
+                    $userInterview = new BaseUserInterview($input["question"], $input["answer"], $input["id"]);
                     if ( !$this->userInterviewRepository->updateUserInterview($retrievedUser, $userInterview) ) {
                         throw (new Exception("Failed to update Interview.", 1));
                     }

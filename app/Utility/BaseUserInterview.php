@@ -3,7 +3,7 @@ namespace App\Utility;
 
 use Illuminate\Support\Str;
 
-class BaseUserService
+class BaseUserInterview
 {
     /** @var string */
     public $id;

@@ -106,7 +106,7 @@ class UserRepository implements UserRepositoryInterface
 					->orWhere('email', 'LIKE', "%{$keyword}%") 
 					->orWhere('website', 'LIKE', "%{$keyword}%");
 			})
-			->get();
+			->paginate(10);
 	}
 	
 	/**

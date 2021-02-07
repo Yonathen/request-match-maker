@@ -7,6 +7,8 @@ use App\model\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+use App\Utility\BaseUser;
+
 class UserRepository implements UserRepositoryInterface
 {
 
@@ -97,7 +99,7 @@ class UserRepository implements UserRepositoryInterface
      */
 	public function searchUsersByKeyword(User $user, $keyword)
 	{
-		return User::select(BaseRequest::getAttributes())
+		return User::select(BaseUser::getAttributes())
 			->where('id', '!=', $user->id)
 			->where(function($query) {
 				$query->where('name', 'LIKE', "%{$keyword}%") 
@@ -112,7 +114,7 @@ class UserRepository implements UserRepositoryInterface
 	*/
    public function getAllUser(User $user)
    {
-	   return User::select(BaseRequest::getAttributes())
+	   return User::select(BaseUser::getAttributes())
 		   ->where('id', '!=', $user->id)
 		   ->paginate(10);
    }

@@ -577,7 +577,7 @@ class UserController extends Controller
             $this->returnType = ReturnType::COLLECTION;
 
             $input = $request->json()->all();
-            if (array_key_exists("keyword", $input) && input["keyword"] !== '') {
+            if (array_key_exists("keyword", $input) && $input["keyword"] !== '') {
                 $result = $this->userRepository->searchUsersByKeyword($user, $input['keyword']);
             } else {
                 $result = $this->userRepository->getAllUser($user);

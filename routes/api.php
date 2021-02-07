@@ -29,7 +29,6 @@ Route::prefix('v1')->group(function(){
         Route::post('profile/update/interview', 'UserController@updateProfileInterview');
 
 		Route::get('user/partners', 'UserController@getPartnerData');
-		Route::get('user/searchByKeyword', 'UserController@searchForUser');
 
 		Route::get('user/request', 'UserController@getMyRequests');
 		Route::get('user/offer', 'UserController@getMyOffers');
@@ -38,6 +37,8 @@ Route::prefix('v1')->group(function(){
 
 		Route::get('user/notifications', 'UserController@getMyNotifications')->name('notifications');
 
+		Route::post('user/searchByKeyword', 'UserController@searchForUser');
+		
 		Route::post('partner/request', 'PartnerController@requestPartnership');
 		Route::post('partner/confirm', 'PartnerController@confirmPartner');
 		Route::post('partner/remove', 'PartnerController@removePartner');

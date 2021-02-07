@@ -6,33 +6,43 @@ use App\model\User;
 interface UserRepositoryInterface
 {
 
-
-	/**
+     /**
      * @return User $user
      */
-	public function getAuthUser();
+     public function getAuthUser();
 
-	/**
-	 * @param string $column_name
-	 * @param string $email
+     /**
+     * @param string $column_name
+     * @param string $email
      * @return User $user
      */
-	public function getUser($column_name, $email);
-	
+     public function getUser($column_name, $email);
+
      /**
      * @param User $user
      */
-    public function verifyEmail(User $user);
+     public function verifyEmail(User $user);
 
-	/**
+     /**
      * @param array $data
      */
-	public function accessToken($data);
+     public function accessToken($data);
 
-	public function logout();
+     public function logout();
 
-    public function logoutFromAllDevice();
+     public function logoutFromAllDevice();
 
+     /**
+     * @param User $user
+     * @param string keyword
+     */
+     public function searchUsersByKeyword(User $user, $keyword);
+
+     /**
+     * @param User $user
+     * @param string keyword
+     */
+     public function getAllUser(User $user, $keyword);
 
 
 }

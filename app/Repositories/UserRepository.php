@@ -90,6 +90,31 @@ class UserRepository implements UserRepositoryInterface
 	{
 		return $user->save();
 	}
-
+	
+     /**
+     * @param User $user
+	 * @param string keyword
+     */
+	public function searchUsersByKeyword(User $user, $keyword)
+	{
+		return User::select(BaseRequest::getAttributes())
+			->where('id', '!=', $user->id)
+			->where(function($query) {
+				$query->where('name', 'LIKE', "%{$keyword}%") 
+					->orWhere('email', 'LIKE', "%{$keyword}%") 
+					->orWhere('website', 'LIKE', "%{$keyword}%");
+			})
+			->get();
+	}
+	
+	/**
+	* @param User $user
+	*/
+   public function getAllUser(User $user)
+   {
+	   return User::select(BaseRequest::getAttributes())
+		   ->where('id', '!=', $user->id)
+		   ->paginate(10);
+   }
 
 }

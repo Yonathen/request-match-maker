@@ -567,6 +567,30 @@ class UserController extends Controller
     }
 
     /// -- My PARTNERSHIP -- ///
+    public function searchForUser(Request $request) {
+        $this->type = 'Search_For_User';
+        try {
+            $user = $this->userRepository->getAuthUser();
+            $this->returnType = ReturnType::COLLECTION;
+
+            $input = $request->json()->all();
+            if (array_key_exists("keyword", $input) && input["keyword"] !== '') {
+                $result = $this->userRepository->searchUsersByKeyword($user, $input['keyword']);
+            } else {
+                $result = $this->userRepository->getAllUser($user);
+            }
+
+            if (is_null($result)) {
+                throw (new Exception("Failed to get data.", 1));
+            }
+            $this->returnValue = $result;
+        } catch (Exception $e) {
+            $this->failedRequest($e);
+        }
+
+        return $this->getResponse();
+    }
+
     public function getPartnerData(Request $request) {
         $this->type = 'getPartnerdata';
         try {

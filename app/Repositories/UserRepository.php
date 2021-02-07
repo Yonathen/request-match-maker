@@ -101,7 +101,7 @@ class UserRepository implements UserRepositoryInterface
 	{
 		return User::select(BaseUser::getAttributes())
 			->where('id', '!=', $user->id)
-			->where(function($query) {
+			->where(function($query) use ($keyword) {
 				$query->where('name', 'LIKE', "%{$keyword}%") 
 					->orWhere('email', 'LIKE', "%{$keyword}%") 
 					->orWhere('website', 'LIKE', "%{$keyword}%");

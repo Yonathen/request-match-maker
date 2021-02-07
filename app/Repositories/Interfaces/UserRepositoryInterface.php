@@ -40,9 +40,8 @@ interface UserRepositoryInterface
 
      /**
      * @param User $user
-     * @param string keyword
      */
-     public function getAllUser(User $user, $keyword);
+     public function getAllUser(User $user);
 
 
 }

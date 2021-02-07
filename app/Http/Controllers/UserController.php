@@ -571,6 +571,9 @@ class UserController extends Controller
         $this->type = 'Search_For_User';
         try {
             $user = $this->userRepository->getAuthUser();
+            if( is_null($user) ){
+                throw (new Exception("Failed to get user.", 1));
+            }
             $this->returnType = ReturnType::COLLECTION;
 
             $input = $request->json()->all();

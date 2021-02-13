@@ -42,7 +42,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 						->orWhere('confirmed_by', $user->id);
 				})
 				->with('requestedUser', 'confirmedUser')
-				->paginate(10);
+				->get();
 	}
 
 	/**
@@ -53,7 +53,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 		return UserPartner::where('status', PartnerStatus::PENDING)
 				->where('confirmed_by', $user->id)
 				->with('requestedUser', 'confirmedUser')
-				->paginate(10);
+				->get();
 	}
 
 	/**
@@ -65,7 +65,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 				->where('requested_by', $userI->id)
 				->where('confirmed_by', $userII->id)
 				->with('requestedUser', 'confirmedUser')
-				->first();
+				->get();
 	}
 
 	/**
@@ -76,7 +76,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 		return UserPartner::where('status', PartnerStatus::PENDING)
 				->where('requested_by', $user->id)
 				->with('requestedUser', 'confirmedUser')
-				->paginate(10);
+				->get();
 	}
 
 	/**
@@ -87,7 +87,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 		return UserPartner::where('status', PartnerStatus::BLOCKED)
 				->where('requested_by', $user->id)
 				->with('requestedUser', 'confirmedUser')
-				->paginate(10);
+				->get();
 	}
 
 	/**

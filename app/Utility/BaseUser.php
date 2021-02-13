@@ -31,7 +31,7 @@ class BaseUser
 	
 	public static function getAttributes() 
 	{
-		return ['id', 'name', 'email', 'logo', 'address', 'website', 'language', 'PartnershipStatus'];
+		return ['id', 'name', 'email', 'logo', 'address', 'website', 'language'];
 	}
 
 }

@@ -100,6 +100,7 @@ class UserRepository implements UserRepositoryInterface
 	public function searchUsersByKeyword(User $user, $keyword)
 	{
 		return User::select(BaseUser::getAttributes())
+			->with('partnershipStatus'),
 			->where('id', '!=', $user->id)
 			->where(function($query) use ($keyword) {
 				$query->where('name', 'LIKE', "%{$keyword}%") 

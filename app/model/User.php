@@ -82,7 +82,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\model\RequestTrader');
     }
 
-    public function getPartnershipStatusAttribute() 
+    public function partnershipStatus() 
     {
         if (Auth::check()) {
 			$user = Auth::user();

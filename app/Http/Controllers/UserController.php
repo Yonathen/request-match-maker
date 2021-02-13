@@ -566,7 +566,6 @@ class UserController extends Controller
         return $this->getResponse();
     }
 
-    /// -- My PARTNERSHIP -- ///
     public function searchForUser(Request $request) {
         $this->type = 'Search_For_User';
         try {

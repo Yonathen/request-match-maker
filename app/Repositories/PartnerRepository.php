@@ -18,7 +18,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 	 * @param User $user
 	 * @param User $userII
      */
-	public function getPatner($userI, $userII)
+	public function getPartner($userI, $userII)
 	{
 		return UserPartner::where('requested_by', $userI->id)
 			->where('confirmed_by', $userII->id)
@@ -34,7 +34,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 	/**
 	 * @param User $user
      */
-	public function getConfirmedPatners(User $user)
+	public function getConfirmedPartners(User $user)
 	{
 		return UserPartner::where('status', $status = PartnerStatus::CONFIRMED)
 				->where(function($query) use ($user) {
@@ -48,7 +48,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 	/**
 	 * @param User $user
      */
-	public function getReceivedPatnerRequests(User $user)
+	public function getReceivedPartnerRequests(User $user)
 	{
 		return UserPartner::where('status', PartnerStatus::PENDING)
 				->where('confirmed_by', $user->id)
@@ -59,7 +59,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 	/**
 	 * @param User $user
      */
-	public function getReceivedPatnerRequest($userI, $userII)
+	public function getReceivedPartnerRequest($userI, $userII)
 	{
 		return UserPartner::where('status', PartnerStatus::PENDING)
 				->where('requested_by', $userI->id)
@@ -71,7 +71,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 	/**
 	 * @param User $user
      */
-	public function getSelfPatnerRequests(User $user)
+	public function getSelfPartnerRequests(User $user)
 	{
 		return UserPartner::where('status', PartnerStatus::PENDING)
 				->where('requested_by', $user->id)
@@ -82,7 +82,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 	/**
 	 * @param User $user
      */
-	public function getBlockedPatners(User $user)
+	public function getBlockedPartners(User $user)
 	{
 		return UserPartner::where('status', PartnerStatus::BLOCKED)
 				->where('requested_by', $user->id)

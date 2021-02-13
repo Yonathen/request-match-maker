@@ -10,27 +10,27 @@ interface PartnerRepositoryInterface
 	 * @param User $userI
 	 * @param User $userII
      */
-	public function getPatner($userI, $userII);
+	public function getPartner($userI, $userII);
 
 	/**
 	 * @param User $user
      */
-	public function getConfirmedPatners(User $user);
+	public function getConfirmedPartners(User $user);
 
 	/**
 	 * @param User $user
      */
-	public function getReceivedPatnerRequests(User $user);
+	public function getReceivedPartnerRequests(User $user);
 
 	/**
 	 * @param User $user
      */
-	public function getSelfPatnerRequests(User $user);
+	public function getSelfPartnerRequests(User $user);
 
 	/**
 	 * @param User $user
      */
-	public function getBlockedPatners(User $user);
+	public function getBlockedPartners(User $user);
 
 	/**
      * @param UserPartner $userPartner

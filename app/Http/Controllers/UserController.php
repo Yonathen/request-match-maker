@@ -603,16 +603,16 @@ class UserController extends Controller
             switch($request->type)
             {
                 case 'MyPartners':
-                    $result = $this->partnerRepository->getConfirmedPatners($user);
+                    $result = $this->partnerRepository->getConfirmedPartners($user);
                 break;
                 case 'MyPartnerRequests':
-                    $result = $this->partnerRepository->getSelfPatnerRequests($user);
+                    $result = $this->partnerRepository->getSelfPartnerRequests($user);
                 break;
-                case 'MyRecivedRequests':
-                    $result = $this->partnerRepository->getReceivedPatnerRequests($user);
+                case 'MyReceivedRequests':
+                    $result = $this->partnerRepository->getReceivedPartnerRequests($user);
                 break;
                 case 'MyBlockedPartners':
-                    $result = $this->partnerRepository->getBlockedPatners($user);
+                    $result = $this->partnerRepository->getBlockedPartners($user);
                 break;
             }
 

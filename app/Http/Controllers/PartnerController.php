@@ -45,7 +45,7 @@ class PartnerController extends Controller
     public function validateRequest($requestingUser, $confirmingUser)
     {
         return ( !is_null($confirmingUser) &&
-            is_null( $this->partnerRepository->getPatner( $requestingUser, $confirmingUser ) ) &&
+            is_null( $this->partnerRepository->getPartner( $requestingUser, $confirmingUser ) ) &&
             $requestingUser->email !== $confirmingUser->email );
     }
 
@@ -81,7 +81,7 @@ class PartnerController extends Controller
 
     public function validateConfirm($requestingUser, $confirmingUser, $partnerToConfrim)
     {
-        $partnerToConfrim = $this->partnerRepository->getPatner( $requestingUser, $confirmingUser );
+        $partnerToConfrim = $this->partnerRepository->getPartner( $requestingUser, $confirmingUser );
         return ( 
             !is_null($requestingUser) &&
             !( is_null( $partnerToConfrim ) && $partnerToConfrim->confirmed_by !== $confirmingUser->id ) &&
@@ -95,7 +95,7 @@ class PartnerController extends Controller
         try {
             $confirmingUser = $this->userRepository->getAuthUser();
             $requestingUser = $this->userRepository->getUser( 'email', $request->email );
-            $partnerToConfrim = $this->partnerRepository->getReceivedPatnerRequest( $requestingUser, $confirmingUser );
+            $partnerToConfrim = $this->partnerRepository->getReceivedPartnerRequest( $requestingUser, $confirmingUser );
             if ( is_null($partnerToConfrim) ) {
                 throw (new Exception("Failed to confirm partnership.", 1));
             }
@@ -124,7 +124,7 @@ class PartnerController extends Controller
         try {
             $authUser = $this->userRepository->getAuthUser();
             $partnerUser = $this->userRepository->getUser( 'email', $request->email );
-            $partnerToRemove = $this->partnerRepository->getPatner( $authUser, $partnerUser );
+            $partnerToRemove = $this->partnerRepository->getPartner( $authUser, $partnerUser );
             if (is_null($partnerUser) || is_null( $partnerToRemove ) ) {
                 throw (new Exception("Failed to remove partnership.", 1));
             }
@@ -162,7 +162,7 @@ class PartnerController extends Controller
         try {
             $authUser = $this->userRepository->getAuthUser();
             $partnerUser = $this->userRepository->getUser( 'email', $request->email );
-            $partnerToBlock = $this->partnerRepository->getPatner( $authUser, $partnerUser );
+            $partnerToBlock = $this->partnerRepository->getPartner( $authUser, $partnerUser );
             if (is_null($partnerUser) || is_null( $partnerToBlock ) ) {
                 throw (new Exception("Failed to confirm partnership.", 1));
             }

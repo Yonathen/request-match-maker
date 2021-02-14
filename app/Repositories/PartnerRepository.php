@@ -65,7 +65,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 				->where('requested_by', $userI->id)
 				->where('confirmed_by', $userII->id)
 				->with('requestedUser', 'confirmedUser')
-				->get();
+				->first();
 	}
 
 	/**

@@ -91,7 +91,7 @@ class PartnerController extends Controller
     }
 
     public function confirmPartner(Request $request) {
-        $this->type = 'confirm_partner';
+        $this->type = 'confirm_request';
         try {
             $confirmingUser = $this->userRepository->getAuthUser();
             $requestingUser = $this->userRepository->getUser( 'email', $request->email );
@@ -101,9 +101,7 @@ class PartnerController extends Controller
             }
 
             $partnerToConfrim->status = PartnerStatus::CONFIRMED;
-
-            print($partnerToConfrim->status);
-            /*if ( !$this->partnerRepository->savePartner( $partnerToConfrim ) ) {
+            if ( !$this->partnerRepository->savePartner( $partnerToConfrim ) ) {
                 throw (new Exception("Failed to confirm partnership.", 1));
             }
 
@@ -111,7 +109,7 @@ class PartnerController extends Controller
             $this->notificationRepository->sendNotification($requestingUser, $notification);
 
 
-            Mail::to($requestingUser->email)->send(new PartnerEmail($requestingUser, $confirmingUser, NotificationType::NEW_PARTNER));*/
+            Mail::to($requestingUser->email)->send(new PartnerEmail($requestingUser, $confirmingUser, NotificationType::NEW_PARTNER));
 
             $this->returnValue = $partnerToConfrim;
         } catch (Exception $e) {

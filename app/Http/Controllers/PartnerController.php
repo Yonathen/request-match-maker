@@ -102,7 +102,7 @@ class PartnerController extends Controller
 
             $partnerToConfrim->status = PartnerStatus::CONFIRMED;
 
-            print_r($partnerToConfrim);
+            print($partnerToConfrim->status);
             /*if ( !$this->partnerRepository->savePartner( $partnerToConfrim ) ) {
                 throw (new Exception("Failed to confirm partnership.", 1));
             }

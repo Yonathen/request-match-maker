@@ -28,7 +28,7 @@ Route::prefix('v1')->group(function(){
         Route::post('profile/update/service', 'UserController@updateProfileService');
         Route::post('profile/update/interview', 'UserController@updateProfileInterview');
 
-		Route::get('user/partners', 'UserController@getPartnerData');
+		Route::get('user/partners/{type}', 'UserController@getPartnerData');
 
 		Route::get('user/request', 'UserController@getMyRequests');
 		Route::get('user/offer', 'UserController@getMyOffers');

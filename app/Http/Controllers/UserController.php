@@ -593,13 +593,13 @@ class UserController extends Controller
         return $this->getResponse();
     }
 
-    public function getPartnerData(Request $request) {
-        $this->type = 'getPartnerdata';
+    public function getPartnerData($type = null) {
+        $this->type = 'getPartnerData';
         try {
             $user = $this->userRepository->getAuthUser();
             $this->returnType = ReturnType::COLLECTION;
             $result = null;
-            switch($request->type)
+            switch($type)
             {
                 case 'MyPartners':
                     $result = $this->partnerRepository->getConfirmedPartners($user);

@@ -101,6 +101,16 @@ class PartnerRepository implements PartnerRepositoryInterface
 		$user->blocked_accounts = $blockedAccounts;
 		$user->save();
 
+
+		$blockedAccounts = $partner->blocked_accounts;
+		if (!is_null($blockedAccounts)) {
+			array_push($blockedAccounts, $partner->id);
+		} else {
+			$blockedAccounts = [ $partner->id ];
+		}
+		$partner->blocked_accounts = $blockedAccounts;
+		$partner->save();
+
 		$partnership->status = PartnerStatus::BLOCKED;
 		return $partnership->save();
 	}

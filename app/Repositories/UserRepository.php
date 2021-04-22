@@ -108,6 +108,7 @@ class UserRepository implements UserRepositoryInterface
 		return User::select(BaseUser::getAttributes())
 			->where('id', '!=', $user->id)
 			->whereNotIn('id', $blockedAccounts)
+			->where('blocked_accounts', 'not like', "%{$user->id}%")
 			->where(function($query) use ($keyword) {
 				$query->where('name', 'LIKE', "%{$keyword}%") 
 					->orWhere('email', 'LIKE', "%{$keyword}%") 

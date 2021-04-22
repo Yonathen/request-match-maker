@@ -573,6 +573,12 @@ class UserController extends Controller
             if( is_null($user) ){
                 throw (new Exception("Failed to get user.", 1));
             }
+
+            $blockedUsers = $this->partnerRepository->getBlockedPartners($user);
+            if( is_null($blockedUsers) ){
+                throw (new Exception("Failed to get blocked users.", 1));
+            }
+
             $this->returnType = ReturnType::COLLECTION;
 
             $input = $request->json()->all();
@@ -580,6 +586,13 @@ class UserController extends Controller
                 $result = $this->userRepository->searchUsersByKeyword($user, $input['keyword']);
             } else {
                 $result = $this->userRepository->getAllUser($user);
+            }
+
+            foreach ( $result as $key => $value ) {
+                $found = array_search($value['id'], array_column($blockedUsers, 'id'));
+                if ( is_int($found) ) {
+                    unset($result[$key]);
+                }
             }
 
             if (is_null($result)) {

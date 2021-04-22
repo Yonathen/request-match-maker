@@ -164,12 +164,12 @@ class PartnerController extends Controller
             $partnerUser = $this->userRepository->getUser( 'email', $request->email );
             $partnerToBlock = $this->partnerRepository->getPartner( $authUser, $partnerUser );
             if (is_null($partnerUser) || is_null( $partnerToBlock ) ) {
-                throw (new Exception("Failed to confirm partnership.", 1));
+                throw (new Exception("Failed to block partnership.", 1));
             }
 
             $partnerToBlock->status = PartnerStatus::BLOCKED;
             if ( !$this->partnerRepository->savePartner( $partnerToBlock ) ) {
-                throw (new Exception("Failed to confirm partnership.", 1));
+                throw (new Exception("Failed to block partnership.", 1));
             }
 
             $this->returnValue = $partnerToBlock;

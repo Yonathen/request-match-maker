@@ -588,6 +588,7 @@ class UserController extends Controller
                 $result = $this->userRepository->getAllUser($user);
             }
 
+            print_r($blockedUsers);
             foreach ( $result as $key => $value ) {
                 $found = array_search($value['id'], array_column($blockedUsers, 'id'));
                 if ( is_int($found) ) {

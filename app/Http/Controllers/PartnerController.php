@@ -167,8 +167,7 @@ class PartnerController extends Controller
                 throw (new Exception("Failed to block partnership.", 1));
             }
 
-            $partnerToBlock->status = PartnerStatus::BLOCKED;
-            if ( !$this->partnerRepository->savePartner( $partnerToBlock ) ) {
+            if ( !$this->partnerRepository->blockPartner($authUser, $partnerToBlock, $partnerToBlock) ) {
                 throw (new Exception("Failed to block partnership.", 1));
             }
 

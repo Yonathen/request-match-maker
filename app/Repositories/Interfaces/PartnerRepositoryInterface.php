@@ -33,6 +33,13 @@ interface PartnerRepositoryInterface
 	public function getBlockedPartners(User $user);
 
 	/**
+	 * @param User $user
+	 * @param User $partner
+  * @param UserPartner $partnership
+  */
+	public function blockPartner(User $user, User $partner, UserPartner $partnership);
+
+	/**
      * @param UserPartner $userPartner
      */
 	public function savePartner(UserPartner $userPartner);

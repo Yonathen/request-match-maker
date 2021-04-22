@@ -96,7 +96,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 		if (!is_null($blockedAccounts)) {
 			array_push($blockedAccounts, $partner->id);
 		} else {
-			$blockedAccounts = [ $partner->id ];
+			$blockedAccounts = array( $partner->id );
 		}
 		$user->blocked_accounts = $blockedAccounts;
 		$user->save();
@@ -106,7 +106,7 @@ class PartnerRepository implements PartnerRepositoryInterface
 		if (!is_null($blockedAccounts)) {
 			array_push($blockedAccounts, $partner->id);
 		} else {
-			$blockedAccounts = [ $partner->id ];
+			$blockedAccounts = array( $partner->id );
 		}
 		$partner->blocked_accounts = $blockedAccounts;
 		$partner->save();

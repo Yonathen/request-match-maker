@@ -100,11 +100,10 @@ class UserRepository implements UserRepositoryInterface
 	public function searchUsersByKeyword(User $user, $keyword)
 	{
 		$blockedAccounts = $user->blocked_accounts;
-		print_r($blockedAccounts);
 		if (is_null($blockedAccounts)) {
 			$blockedAccounts = array();
 		} else {
-			$blockedAccounts = array_push($blockedAccounts, '');
+			$blockedAccounts = json_decode($blockedAccounts);
 		}
 		return User::select(BaseUser::getAttributes())
 			->where('id', '!=', $user->id)

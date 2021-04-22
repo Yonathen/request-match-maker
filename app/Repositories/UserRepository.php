@@ -102,6 +102,8 @@ class UserRepository implements UserRepositoryInterface
 		$blockedAccounts = $user->blocked_accounts;
 		if (is_null($blockedAccounts)) {
 			$blockedAccounts = array();
+		} else {
+			$blockedAccounts = array_push($blockedAccounts, '');
 		}
 		return User::select(BaseUser::getAttributes())
 			->where('id', '!=', $user->id)

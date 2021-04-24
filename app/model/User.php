@@ -27,7 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $casts = [
         'representative' => 'array', 'service' => 'array', 'address' => 'array',
-        'slides' => 'array', 'contacts' => 'array', 'notifications' => 'array',
+        'slides' => 'array', 'blocked_accounts' => 'array', 'contacts' => 'array', 
+        'notifications' => 'array',
     ];
 
     public function AauthAcessToken(){

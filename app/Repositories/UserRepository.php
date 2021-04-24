@@ -102,13 +102,10 @@ class UserRepository implements UserRepositoryInterface
 		$blockedAccounts = $user->blocked_accounts;
 		if (is_null($blockedAccounts)) {
 			$blockedAccounts = array();
-		} else {
-			$blockedAccounts = json_decode($blockedAccounts);
-		}
+		} 
 		return User::select(BaseUser::getAttributes())
 			->where('id', '!=', $user->id)
 			->whereNotIn('id', $blockedAccounts)
-			->where('blocked_accounts', 'not like', "%{$user->id}%")
 			->where(function($query) use ($keyword) {
 				$query->where('name', 'LIKE', "%{$keyword}%") 
 					->orWhere('email', 'LIKE', "%{$keyword}%") 

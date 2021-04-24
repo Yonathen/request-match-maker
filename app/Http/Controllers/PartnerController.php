@@ -133,9 +133,6 @@ class PartnerController extends Controller
                 throw (new Exception("Failed to remove partnership.", 1));
             }
             
-            $this->removePartnerNotifications($partnerUser, $authUser->email);
-            $this->removePartnerNotifications($authUser, $partnerUser->email);
-            
             $this->returnValue = $partnerToRemove;
         } catch (Exception $e) {
             $this->failedRequest($e);

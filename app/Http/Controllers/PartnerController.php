@@ -97,7 +97,7 @@ class PartnerController extends Controller
             $requestingUser = $this->userRepository->getUser( 'email', $request->email );
             $partnerToConfrim = $this->partnerRepository->getReceivedPartnerRequest( $requestingUser, $confirmingUser );
             if ( is_null($partnerToConfrim) ) {
-                throw (new Exception($requestingUser, 1));
+                throw (new Exception("Unable to find partner request.", 1));
             }
 
             $partnerToConfrim->status = PartnerStatus::CONFIRMED;

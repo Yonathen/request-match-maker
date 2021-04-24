@@ -126,7 +126,7 @@ class PartnerController extends Controller
             $partnerUser = $this->userRepository->getUser( 'email', $request->email );
             $partnerToRemove = $this->partnerRepository->getPartner( $authUser, $partnerUser );
             if (is_null($partnerUser) || is_null( $partnerToRemove ) ) {
-                throw (new Exception("Failed to remove partnership.", 1));
+                throw (new Exception("Failed to get partner to remove.", 1));
             }
 
             if ( !$this->partnerRepository->removePartner($partnerToRemove) ) {
